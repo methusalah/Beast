@@ -4,29 +4,60 @@ package model.universe;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Universe {
+import utils.LogUtil;
+import utils.MyRandom;
+import utils.StopWatch;
 
-	RessourceSet ressourceSet;
+public class Universe {
+	private static final double RESOURCE_RATE = 0.05;
+
+	ResourceSet resourceSet;
 	final int width, height;
-	final List<Tile> tiles = new ArrayList<>();
+	public final List<Tile> tiles = new ArrayList<>();
 	final List<Tile> updatedTiles = new ArrayList<>();
+	
+	public final List<UComp> comps = new ArrayList<>();
+	
+	public StopWatch stopwatch;
+	
+	public int turn;
 	
 	public Universe(int width, int height) {
 		this.width = width;
 		this.height = height;
+		
+		resourceSet = new ResourceSet();
+		
         for(int y=0; y<height; y++)
-            for(int x=0; x<width; x++)
-                tiles.add(new Tile(x, y, this));
+            for(int x=0; x<width; x++){
+            	Tile t = new Tile(x, y, this);
+                tiles.add(t);
+                if(MyRandom.next() < RESOURCE_RATE)
+                	new ResourceSpot(t, resourceSet.getRandomResource());
+            }
+        updatedTiles.addAll(tiles);
+	}
+	
+	public void update(){
+		stopwatch = new StopWatch("universe");
+		turn++;
+		// Independent list is needed because on update, comps can register and unregister from the universe.
+		List<UComp> indiList = new ArrayList<>();
+		indiList.addAll(comps);
+		for(UComp c : indiList){
+			c.update();
+		}
+		
 	}
 	
     public Tile getTile(int x, int y) {
     	if(!isInBounds(x, y))
-    		throw new IllegalArgumentException("coord are not in universe bounds"+x+":"+y);
+    		throw new IllegalArgumentException("Coords are not in "+Universe.class.getSimpleName()+"'s bounds ("+x+":"+y+")");
         return tiles.get(y*width+x);
     }
     
     public boolean isInBounds(int x, int y){
-    	return x < 0 || x>width-1 || y<0 || y>height-1;
+    	return x >= 0 && x < width && y >= 0 && y < height;
     }
 	
     public Tile getNeightborTile(Tile t, int x, int y){
@@ -49,6 +80,14 @@ public class Universe {
 		res.addAll(updatedTiles);
 		updatedTiles.clear();
 		return res;
+	}
+
+	public void registerNewComp(UComp comp) {
+		comps.add(comp);
+	}
+
+	public void unregisterDestroyedComp(UComp comp) {
+		comps.remove(comp);
 	}
 	
 }

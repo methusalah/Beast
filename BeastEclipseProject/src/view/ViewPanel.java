@@ -58,7 +58,7 @@ public class ViewPanel extends JPanel {
 			
 			g.setColor(Color.WHITE);
 			g.setFont(new Font("Arial",Font.PLAIN,12));
-			g.drawString(Recorder.str()+"turn "+model.universe.turn+" comps : "+model.universe.comps.size(), 0+4,  getHeight()-4);
+			g.drawString(Recorder.str()+"turn "+model.universe.turn+" active spots : "+model.universe.toUpdateSpots.size()+" beasts : "+model.universe.beasts.size(), 0+4,  getHeight()-4);
 		}
 		Recorder.record(chrono);
 		Recorder.record(model.universe.stopwatch);

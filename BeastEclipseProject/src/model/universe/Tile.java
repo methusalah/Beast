@@ -3,6 +3,8 @@ package model.universe;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.universe.resource.Resource;
+import model.universe.resource.ResourceSpot;
 import utils.MyRandom;
 
 public class Tile {
@@ -49,6 +51,27 @@ public class Tile {
 		case 3: return getWest();
 		default: throw new RuntimeException();
 		}
+	}
+	public List<Tile> getAllNeighbors(){
+		List<Tile> res = new ArrayList<>();
+		res.add(getNorth());
+		res.add(getSouth());
+		res.add(getEast());
+		res.add(getWest());
+		return res;
+	}
+	
+	public boolean contains(Resource r){
+		for(UComp c : comps)
+			if(c instanceof ResourceSpot && ((ResourceSpot)c).resource == r)
+				return true;
+		return false;
+	}
+	public ResourceSpot getResourceSpot(Resource r){
+		for(UComp c : comps)
+			if(c instanceof ResourceSpot && ((ResourceSpot)c).resource == r)
+				return (ResourceSpot)c;
+		return null;
 	}
 
 }

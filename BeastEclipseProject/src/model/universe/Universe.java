@@ -3,9 +3,12 @@ package model.universe;
 
 import geometry.Point2D;
 
+import java.nio.file.ReadOnlyFileSystemException;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.universe.beast.Beast;
+import model.universe.resource.Resource;
 import model.universe.resource.ResourceSet;
 import model.universe.resource.ResourceSpot;
 import utils.LogUtil;
@@ -15,12 +18,14 @@ import utils.StopWatch;
 public class Universe {
 	private static final double RESOURCE_RATE = 0.05;
 
-	ResourceSet resourceSet;
+	public ResourceSet resourceSet;
 	final int width, height;
 	public final List<Tile> tiles = new ArrayList<>();
 	final List<Tile> updatedTiles = new ArrayList<>();
 	
-	public final List<UComp> comps = new ArrayList<>();
+	public final List<UComp> allSpots = new ArrayList<>();
+	public final List<UComp> toUpdateSpots = new ArrayList<>();
+	public final List<UComp> beasts = new ArrayList<>();
 	
 	public StopWatch stopwatch;
 	
@@ -47,10 +52,15 @@ public class Universe {
 		turn++;
 		// Independent list is needed because on update, comps can register and unregister from the universe.
 		List<UComp> indiList = new ArrayList<>();
-		indiList.addAll(comps);
+		indiList.addAll(toUpdateSpots);
+		indiList.addAll(beasts);
 		for(UComp c : indiList){
 			c.update();
 		}
+		
+		if(beasts.size() < 1000)
+			for(int i=0; i<1000; i++)
+				new Beast(this, new Point2D(MyRandom.next()*(width-1), MyRandom.next()*(height-1)));
 		
 	}
 	
@@ -84,6 +94,11 @@ public class Universe {
 		if(!updatedTiles.contains(t))
 			updatedTiles.add(t);
 	}
+    
+    public ResourceSpot getResourceSpot(Resource resource, Point2D coord){
+    	Tile t = getTile(coord);
+    	return t.getResourceSpot(resource);
+    }
 	
 	public List<Tile> grabUpdated(){
 		List<Tile> res = new ArrayList<>();
@@ -92,12 +107,26 @@ public class Universe {
 		return res;
 	}
 
-	public void registerNewComp(UComp comp) {
-		comps.add(comp);
+	public void register(UComp comp) {
+		if(comp instanceof ResourceSpot){
+			allSpots.add(comp);
+			toUpdateSpots.add(comp);
+		} else
+			beasts.add(comp);
 	}
 
-	public void unregisterDestroyedComp(UComp comp) {
-		comps.remove(comp);
+	public void unregister(UComp comp) {
+		if(comp instanceof ResourceSpot)
+			toUpdateSpots.remove(comp);
+		else
+			beasts.remove(comp);
+	}
+
+	public void destroy(UComp comp) {
+		unregister(comp);
+		if(comp instanceof ResourceSpot)
+			allSpots.remove(comp);
+		getTile(comp.coord).unregister(comp);
 	}
 	
 }

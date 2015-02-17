@@ -13,7 +13,7 @@ public class Resource {
 	private static double Q_HARVEST_MAX = 100;
 	private static double CAN_DISAPEAR_PROB = 0.5;
 	private static double CAN_EXPAND_PROB = 0.1;
-	private static double EXPAND_PROB_MAX = 0.001;
+	private static double EXPAND_PROB_MAX = 0.1;
 	private static double SPONTANEOUS_PROB = 0.5;
 	private static double SPONTANEOUS_ON_CORPSE_PROB = 0.1;
 	

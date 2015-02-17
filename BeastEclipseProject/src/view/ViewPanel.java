@@ -14,9 +14,9 @@ import javax.swing.JPanel;
 import utils.Recorder;
 import utils.StopWatch;
 import model.Model;
-import model.universe.ResourceSpot;
 import model.universe.Tile;
 import model.universe.UComp;
+import model.universe.resource.ResourceSpot;
 
 public class ViewPanel extends JPanel {
 

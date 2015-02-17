@@ -15,7 +15,7 @@ public class BeastMain {
 		Logger.getLogger("").setLevel(Level.INFO);
 		LogUtil.init();
 		
-		Model model = new Model(300, 100);
+		Model model = new Model(400, 400);
 		
 		final MainFrame frame = new MainFrame();
 		frame.init(model);

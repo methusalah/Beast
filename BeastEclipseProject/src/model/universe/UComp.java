@@ -1,21 +1,20 @@
 package model.universe;
 
-public abstract class UComp {
-	
-	Tile tile;
-	protected boolean destroyed = false;
+import geometry.Point2D;
 
-	public UComp(Tile tile) {
-		this.tile = tile;
-		tile.registerOnCreation(this);
+public abstract class UComp {
+
+	protected Point2D coord;
+	final protected Universe universe;
+
+	public UComp(Universe universe, Point2D coord) {
+		this.universe = universe;
+		this.coord = coord;
+		universe.registerNewComp(this);
 	}
 	public abstract void update();
 	
 	protected void destroy() {
-		destroyed = true;
-		tile.unregisterOnDestroy(this);
-	}
-	public boolean isDestroyed() {
-		return destroyed;
+		universe.unregisterDestroyedComp(this);
 	}
 }

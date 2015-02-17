@@ -1,4 +1,4 @@
-package model.universe;
+package model.universe.resource;
 
 import java.util.ArrayList;
 import java.util.List;

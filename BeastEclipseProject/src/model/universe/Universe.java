@@ -1,9 +1,13 @@
 package model.universe;
 
 
+import geometry.Point2D;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import model.universe.resource.ResourceSet;
+import model.universe.resource.ResourceSpot;
 import utils.LogUtil;
 import utils.MyRandom;
 import utils.StopWatch;
@@ -33,7 +37,7 @@ public class Universe {
             	Tile t = new Tile(x, y, this);
                 tiles.add(t);
                 if(MyRandom.next() < RESOURCE_RATE)
-                	new ResourceSpot(t, resourceSet.getRandomResource());
+                	t.register(new ResourceSpot(this, new Point2D(x, y), resourceSet.getRandomResource()));
             }
         updatedTiles.addAll(tiles);
 	}
@@ -54,6 +58,12 @@ public class Universe {
     	if(!isInBounds(x, y))
     		throw new IllegalArgumentException("Coords are not in "+Universe.class.getSimpleName()+"'s bounds ("+x+":"+y+")");
         return tiles.get(y*width+x);
+    }
+
+    public Tile getTile(Point2D coord) {
+    	int x = (int)Math.round(coord.x);
+    	int y = (int)Math.round(coord.y);
+    	return getTile(x, y);
     }
     
     public boolean isInBounds(int x, int y){

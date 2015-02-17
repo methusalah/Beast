@@ -17,20 +17,12 @@ public class Tile {
 		this.universe = universe;
 	}
 	
-	public void registerOnCreation(UComp comp){
-		universe.registerNewComp(comp);
-		register(comp);
-	}
 	public void register(UComp comp){
 		if(!comps.contains(comp))
 			comps.add(comp);
 		universe.setUpdated(this);
 	}
 
-	public void unregisterOnDestroy(UComp comp){
-		universe.unregisterDestroyedComp(comp);
-		unregister(comp);
-	}
 	public void unregister(UComp comp){
 		boolean removed = comps.remove(comp);
 		if(removed)

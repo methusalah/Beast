@@ -1,4 +1,4 @@
-package model.universe;
+package model.universe.resource;
 
 public interface ResourceIDManager {
 

@@ -19,14 +19,17 @@ public class Universe {
 	private static final double RESOURCE_RATE = 0.05;
 
 	public ResourceSet resourceSet;
-	final int width, height;
+	public final int width;
+	public final int height;
+
 	public final List<Tile> tiles = new ArrayList<>();
-	final List<Tile> updatedTiles = new ArrayList<>();
+	private final List<Tile> updatedTiles = new ArrayList<>();
 	
 	public final List<UComp> toUpdateSpots = new ArrayList<>();
 	public final List<UComp> beasts = new ArrayList<>();
 	
 	public StopWatch stopwatch;
+	public String chrono;
 	
 	public int turn;
 	
@@ -44,6 +47,7 @@ public class Universe {
                 	new ResourceSpot(this, new Point2D(x, y), resourceSet.getRandomResource());
             }
         updatedTiles.addAll(tiles);
+		stopwatch = new StopWatch("universe");
 	}
 	
 	public void update(){
@@ -60,7 +64,7 @@ public class Universe {
 		if(beasts.size() < 1000)
 			for(int i=0; i<1000; i++)
 				new Beast(this, new Point2D(MyRandom.next()*(width-1), MyRandom.next()*(height-1)));
-		
+		chrono = stopwatch.toString();
 	}
 	
     public Tile getTile(int x, int y) {
@@ -90,8 +94,10 @@ public class Universe {
     }
 
     public void setUpdated(Tile t){
-		if(!updatedTiles.contains(t))
-			updatedTiles.add(t);
+//    	if(t == null)
+//    		throw new NullPointerException();
+//		if(!updatedTiles.contains(t))
+//			updatedTiles.add(t);
 	}
     
     public ResourceSpot getResourceSpot(Resource resource, Point2D coord){

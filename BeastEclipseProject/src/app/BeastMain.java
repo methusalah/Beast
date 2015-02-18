@@ -4,12 +4,12 @@ package app;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import controller.Loop;
 import model.Model;
 import utils.LogUtil;
 import view.ViewPanel;
 
 public class BeastMain {
-
 	public static void main(String[] args) throws Exception {
 
 		Logger.getLogger("").setLevel(Level.INFO);
@@ -17,17 +17,12 @@ public class BeastMain {
 		
 		Model model = new Model(200, 200);
 		
-		final MainFrame frame = new MainFrame();
-		frame.init(model);
-		
+		final MainFrame frame = new MainFrame(model);
 		ViewPanel view = frame.getViewPanel();
-		model.universe.update();
-		view.repaint();
 		
-//		while (true) {
-			model.universe.update();
-//			view.repaint();
-//		}
+		Loop l = new Loop(model, view);
+		l.start();
+		
 	}
 	
 }

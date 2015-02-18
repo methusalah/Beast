@@ -29,6 +29,7 @@ public abstract class UComp {
 	}
 	
 	public abstract Color getColor();
+	
 	public int getSize(){
 		return 1;
 	}

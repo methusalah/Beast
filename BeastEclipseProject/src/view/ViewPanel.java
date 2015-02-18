@@ -6,8 +6,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+
 import javax.swing.JPanel;
 
+import tools.LogUtil;
 import utils.StopWatch;
 import model.Model;
 import model.universe.Tile;
@@ -22,16 +24,15 @@ public class ViewPanel extends JPanel {
 	
 	public ViewPanel(Model model) {
 		this.model = model;
-		setPreferredSize(new Dimension(model.width*4, model.height*4));
+		setPreferredSize(new Dimension(model.universe.width*4, model.universe.height*4));
 		chrono = new StopWatch("View");
 	}
 
 	@Override
 	public void paint(Graphics g1) {
 		Graphics2D g = (Graphics2D)g1;
-		String universeChrono = model.universe.stopwatch.toString();
 		synchronized(model) {
-			for(Tile t : model.universe.grabUpdated()){
+			for(Tile t : model.universe.tiles){
 				double red=0, green=0, blue=0;
 				int spotCount=0;
 				int size = 0;
@@ -53,7 +54,7 @@ public class ViewPanel extends JPanel {
 						blue += spot.resource.color.getBlue()*spot.getRate();
 					}
 				if(beast)
-					break;
+					continue;
 				if(spotCount != 0){
 					red /= spotCount;
 					green /= spotCount;
@@ -69,7 +70,7 @@ public class ViewPanel extends JPanel {
 			
 			g.setColor(Color.WHITE);
 			g.setFont(new Font("Arial",Font.PLAIN,12));
-			g.drawString(chrono.toString()+" "+universeChrono+" turn "+model.universe.turn+" active spots : "+model.universe.toUpdateSpots.size()+" beasts : "+model.universe.beasts.size(), 0+4,  getHeight()-4);
+			g.drawString(chrono.toString()+" "+model.universe.chrono+" turn "+model.universe.turn+" active spots : "+model.universe.toUpdateSpots.size()+" beasts : "+model.universe.beasts.size(), 0+4,  getHeight()-4);
 		}
 		chrono = new StopWatch("View");
 //		Recorder.record(chrono);

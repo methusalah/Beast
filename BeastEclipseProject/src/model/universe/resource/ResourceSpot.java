@@ -39,7 +39,7 @@ public class ResourceSpot extends UComp {
 					if(hasExpanded)
 						avoidUpdate();
 				} else
-					delay = 100;
+					delay = 1000;
 			} else
 				avoidUpdate();
 		else

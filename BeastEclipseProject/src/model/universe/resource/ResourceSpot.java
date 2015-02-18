@@ -1,5 +1,7 @@
 package model.universe.resource;
 
+import java.awt.Color;
+
 import geometry.Point2D;
 import model.universe.Tile;
 import model.universe.UComp;
@@ -37,7 +39,7 @@ public class ResourceSpot extends UComp {
 					if(hasExpanded)
 						avoidUpdate();
 				} else
-					delay = 1000;
+					delay = 100;
 			} else
 				avoidUpdate();
 		else
@@ -49,7 +51,7 @@ public class ResourceSpot extends UComp {
 		for(Tile n : universe.getTile(coord).getAllNeighbors())
 			if(!n.contains(resource)){
 				success = true;
-				n.register(new ResourceSpot(universe, new Point2D(n.x,  n.y), resource));
+				new ResourceSpot(universe, new Point2D(n.x,  n.y), resource);
 			}
 		return success;
 	}
@@ -68,5 +70,10 @@ public class ResourceSpot extends UComp {
 				destroy();
 		}
 		return harvested;
+	}
+
+	@Override
+	public Color getColor() {
+		return resource.color;
 	}
 }

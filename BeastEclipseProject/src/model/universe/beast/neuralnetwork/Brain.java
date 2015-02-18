@@ -20,6 +20,12 @@ public class Brain {
 	public void stimulate(){
 		for(Sensor s : sensors)
 			s.stimulate();
+		List<Neuron> all = new ArrayList<>();
+		all.addAll(sensors);
+		all.addAll(neurons);
+		all.addAll(actuators);
+		for(Neuron n : all)
+			n.calm();
 	}
 	
 	public void addNeuron(Sensor s){
@@ -33,8 +39,8 @@ public class Brain {
 	}
 	
 	public void createRandomConnexions(){
-//		for(int i=0; i<MyRandom.nextInt(5); i++)
-//			addNeuron(new Neuron());
+		for(int i=0; i<MyRandom.nextInt(5); i++)
+			addNeuron(new Neuron());
 		
 		List<Neuron> from = new ArrayList<>();
 		from.addAll(sensors);

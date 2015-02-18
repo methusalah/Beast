@@ -14,6 +14,7 @@ public class Neuron {
 	final List<Axon> axons = new ArrayList<>();
 	final double thresold;
 	
+	boolean excitedThisTurn = false;
 	double polarisation = 0;
 	
 	public Neuron() {
@@ -24,7 +25,6 @@ public class Neuron {
 		polarisation += value;
 		if(polarisation > thresold){
 			excite();
-			calm();
 		}
 	}
 	
@@ -34,10 +34,14 @@ public class Neuron {
 	
 	public void calm(){
 		polarisation = 0;
+		excitedThisTurn = false;
 	}
 	
 	public void excite(){
-		for(Axon a : axons)
-			a.activate();
+		if(!excitedThisTurn){
+			excitedThisTurn = true;
+			for(Axon a : axons)
+				a.activate();
+		}
 	}
 }

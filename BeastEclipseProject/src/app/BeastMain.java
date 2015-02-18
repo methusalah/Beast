@@ -15,17 +15,19 @@ public class BeastMain {
 		Logger.getLogger("").setLevel(Level.INFO);
 		LogUtil.init();
 		
-		Model model = new Model(500, 300);
+		Model model = new Model(200, 200);
 		
 		final MainFrame frame = new MainFrame();
 		frame.init(model);
 		
 		ViewPanel view = frame.getViewPanel();
+		model.universe.update();
+		view.repaint();
 		
-		while (true) {
+//		while (true) {
 			model.universe.update();
-			view.repaint();
-		}
+//			view.repaint();
+//		}
 	}
 	
 }

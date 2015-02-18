@@ -1,5 +1,7 @@
 package model.universe;
 
+import java.awt.Color;
+
 import geometry.Point2D;
 
 public abstract class UComp {
@@ -10,19 +12,24 @@ public abstract class UComp {
 	public UComp(Universe universe, Point2D coord) {
 		this.universe = universe;
 		this.coord = coord;
-		askUpdate();
+		universe.register(this);
 	}
 	public abstract void update();
 	
 	protected void avoidUpdate(){
-		universe.unregister(this);
+		universe.removeFromUpdates(this);
 	}
 	
 	protected void askUpdate(){
-		universe.register(this);
+		universe.addToUpdates(this);
 	}
 	
 	protected void destroy() {
-		universe.destroy(this);
+		universe.unregister(this);
+	}
+	
+	public abstract Color getColor();
+	public int getSize(){
+		return 1;
 	}
 }

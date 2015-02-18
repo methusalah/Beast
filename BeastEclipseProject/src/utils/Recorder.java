@@ -32,7 +32,7 @@ public class Recorder {
 				sum+=l;
 				count++;
 			}
-			res+=item+":"+df .format(sum/count/1_000_000)+"ms    ";
+			res+=item+":"+df.format(sum/count/1_000_000)+"ms    ";
 		}
 		return res;
 	}

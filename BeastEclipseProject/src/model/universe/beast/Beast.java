@@ -1,5 +1,7 @@
 package model.universe.beast;
 
+import java.awt.Color;
+
 import tools.LogUtil;
 import geometry.Point2D;
 import model.universe.Tile;
@@ -43,4 +45,13 @@ public class Beast extends UComp {
 		need.fulfill(spot.harvest());
 	}
 
+	@Override
+	public Color getColor() {
+		return Color.RED;
+	}
+
+	@Override
+	public int getSize() {
+		return 3;
+	}
 }

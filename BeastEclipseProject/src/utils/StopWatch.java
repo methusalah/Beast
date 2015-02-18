@@ -1,6 +1,9 @@
 package utils;
 
+import java.text.DecimalFormat;
+
 public class StopWatch {
+	private static DecimalFormat df = new DecimalFormat("00.000");
 
 	private long t1;
 	String name;
@@ -20,7 +23,7 @@ public class StopWatch {
 		if (name==null)
 			return "Temps " + (t2-t1)/1000000.0 + "ms";
 		else
-			return name + " : " + (t2-t1)/1000000.0 + "ms";
+			return name+" : "+df.format((t2-t1)/1000000.0)+"ms ";
 	}
 
 	public Long time() {

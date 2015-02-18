@@ -23,7 +23,6 @@ public class Universe {
 	public final List<Tile> tiles = new ArrayList<>();
 	final List<Tile> updatedTiles = new ArrayList<>();
 	
-	public final List<UComp> allSpots = new ArrayList<>();
 	public final List<UComp> toUpdateSpots = new ArrayList<>();
 	public final List<UComp> beasts = new ArrayList<>();
 	
@@ -42,7 +41,7 @@ public class Universe {
             	Tile t = new Tile(x, y, this);
                 tiles.add(t);
                 if(MyRandom.next() < RESOURCE_RATE)
-                	t.register(new ResourceSpot(this, new Point2D(x, y), resourceSet.getRandomResource()));
+                	new ResourceSpot(this, new Point2D(x, y), resourceSet.getRandomResource());
             }
         updatedTiles.addAll(tiles);
 	}
@@ -108,25 +107,27 @@ public class Universe {
 	}
 
 	public void register(UComp comp) {
-		if(comp instanceof ResourceSpot){
-			allSpots.add(comp);
-			toUpdateSpots.add(comp);
-		} else
-			beasts.add(comp);
+		addToUpdates(comp);
+		getTile(comp.coord).register(comp);
 	}
 
 	public void unregister(UComp comp) {
+		removeFromUpdates(comp);
+		getTile(comp.coord).unregister(comp);
+	}
+	
+	public void addToUpdates(UComp comp){
+		if(comp instanceof ResourceSpot)
+			toUpdateSpots.add(comp);
+		else
+			beasts.add(comp);
+	}
+	
+	public void removeFromUpdates(UComp comp){
 		if(comp instanceof ResourceSpot)
 			toUpdateSpots.remove(comp);
 		else
 			beasts.remove(comp);
-	}
-
-	public void destroy(UComp comp) {
-		unregister(comp);
-		if(comp instanceof ResourceSpot)
-			allSpots.remove(comp);
-		getTile(comp.coord).unregister(comp);
 	}
 	
 }

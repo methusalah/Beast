@@ -21,6 +21,7 @@ public class ViewPanel extends JPanel {
 
 	private Model model;
 	StopWatch chrono;
+	Long timer = (long) 0.0;
 	
 	public ViewPanel(Model model) {
 		this.model = model;
@@ -70,10 +71,11 @@ public class ViewPanel extends JPanel {
 			
 			g.setColor(Color.WHITE);
 			g.setFont(new Font("Arial",Font.PLAIN,12));
-			g.drawString(chrono.toString()+" "+model.universe.chrono+" turn "+model.universe.turn+" active spots : "+model.universe.toUpdateSpots.size()+" beasts : "+model.universe.beasts.size(), 0+4,  getHeight()-4);
+			double elapsed = System.currentTimeMillis()-timer;
+			int turnPerSec = (int)Math.round(model.universe.grabTurnCounter()/(elapsed/1000));
+			g.drawString("  "+turnPerSec+" turn/s. Turn "+model.universe.turn+" active spots : "+model.universe.toUpdateSpots.size()+" beasts : "+model.universe.beasts.size(), 0+4,  getHeight()-4);
 		}
 		chrono = new StopWatch("View");
-//		Recorder.record(chrono);
-//		Recorder.record(model.universe.stopwatch);
+		timer = System.currentTimeMillis();
 	}
 }

@@ -28,10 +28,8 @@ public class Universe {
 	public final List<UComp> toUpdateSpots = new ArrayList<>();
 	public final List<UComp> beasts = new ArrayList<>();
 	
-	public StopWatch stopwatch;
-	public String chrono;
-	
-	public int turn;
+	public int turn = 0;
+	public int turnCounter = 0;
 	
 	public Universe(int width, int height) {
 		this.width = width;
@@ -47,12 +45,11 @@ public class Universe {
                 	new ResourceSpot(this, new Point2D(x, y), resourceSet.getRandomResource());
             }
         updatedTiles.addAll(tiles);
-		stopwatch = new StopWatch("universe");
 	}
 	
 	public void update(){
-		stopwatch = new StopWatch("universe");
 		turn++;
+		turnCounter++;
 		// Independent list is needed because on update, comps can register and unregister from the universe.
 		List<UComp> indiList = new ArrayList<>();
 		indiList.addAll(toUpdateSpots);
@@ -64,7 +61,12 @@ public class Universe {
 		if(beasts.size() < 1000)
 			for(int i=0; i<1000; i++)
 				new Beast(this, new Point2D(MyRandom.next()*(width-1), MyRandom.next()*(height-1)));
-		chrono = stopwatch.toString();
+	}
+	
+	public int grabTurnCounter(){
+		int res = turnCounter;
+		turnCounter = 0;
+		return res;
 	}
 	
     public Tile getTile(int x, int y) {

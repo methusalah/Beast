@@ -1,18 +1,16 @@
 package model.universe.beast.neuralnetwork.perception;
 
-import model.universe.beast.Need;
+import model.universe.beast.neuralnetwork.Brain;
 
 public class NeedSensor extends Sensor {
 	
-	final Need need;
-	
-	public NeedSensor(Need need) {
-		this.need = need;
+	public NeedSensor(int serial, Brain brain) {
+		super(serial, brain);
 	}
 
 	@Override
 	public void stimulate() {
-		polarize(need.getDepletionRate()*THRESOLD_MAX);
+		polarize(brain.beast.need.getDepletionRate()*THRESOLD_MAX);
 	}
 
 }

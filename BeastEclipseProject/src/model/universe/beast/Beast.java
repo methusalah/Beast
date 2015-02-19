@@ -10,6 +10,8 @@ import model.universe.UComp;
 import model.universe.Universe;
 import model.universe.beast.neuralnetwork.Brain;
 import model.universe.beast.neuralnetwork.action.Harvester;
+import model.universe.beast.neuralnetwork.action.Mover;
+import model.universe.beast.neuralnetwork.action.Rotator;
 import model.universe.beast.neuralnetwork.perception.NeedSensor;
 import model.universe.beast.neuralnetwork.perception.ResourceSensor;
 import model.universe.resource.Resource;
@@ -18,20 +20,25 @@ import model.universe.resource.ResourceSpot;
 public class Beast extends UComp {
 
 	private final Brain brain;
-	private final Need need;
+	public final Need need;
 	
 	private double orientation;
 	private double maxSpeed = 2;
+	public int age = 0;
 	
 	public Beast(Universe universe, Point2D coord) {
 		super(universe, coord);
 		need = new Need(universe.resourceSet.getRandomResource());
-		brain = new Brain();
-		brain.addNeuron(new NeedSensor(need));
-		brain.addNeuron(new ResourceSensor(universe, this, need.resource));
-		brain.addNeuron(new Harvester(this, need.resource));
+		brain = new Brain(this);
 		brain.createRandomConnexions();
 	}
+	
+	public Beast(Beast parent){
+		super(parent.universe, parent.coord);
+		need = new Need(parent.need);
+		brain = parent.brain.getMutation();
+	}
+	
 
 	@Override
 	public void update() {
@@ -39,6 +46,12 @@ public class Beast extends UComp {
 		need.deplete();
 		if(need.getDepletionRate() <= 0)
 			destroy();
+		age++;
+		if(age==100 ||
+				age==300 ||
+				age==500 ||
+				age==700)
+			reproduce();
 	}
 	
 	public void harvest(Resource resource){
@@ -53,10 +66,14 @@ public class Beast extends UComp {
 	}
 
 	public void move(Double speedRate){
-		coord = coord.getTranslation(orientation, speedRate*maxSpeed);
-		coord = universe.getInBounds(coord);
-		if(!universe.isInBounds((int)coord.x, (int)coord.y))
-			throw new RuntimeException("coord is not in bounds "+coord);
+		Point2D newCoord = universe.getInBounds(coord.getTranslation(orientation, speedRate*maxSpeed));
+		Tile previous = universe.getTile(coord); 
+		Tile newTile = universe.getTile(newCoord);
+		if(previous != newTile){
+			previous.unregister(this);
+			newTile.register(this);
+		}
+		coord = newCoord;
 	}
 	
 
@@ -68,5 +85,9 @@ public class Beast extends UComp {
 	@Override
 	public int getSize() {
 		return 3;
+	}
+	
+	private void reproduce(){
+		
 	}
 }

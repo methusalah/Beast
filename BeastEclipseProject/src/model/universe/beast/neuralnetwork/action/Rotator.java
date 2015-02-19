@@ -1,21 +1,22 @@
 package model.universe.beast.neuralnetwork.action;
 
 import model.universe.beast.Beast;
+import model.universe.beast.neuralnetwork.Brain;
 
 
 public class Rotator extends Actuator {
 	
 	private final double angle;
 	
-	public Rotator(Beast beast, double angle) {
-		super(beast);
+	public Rotator(int serial, Brain brain, double angle) {
+		super(serial, brain);
 		this.angle = angle;
 	}
 
 	@Override
 	public void excite() {
 		super.excite();
-		beast.rotate(angle);
+		brain.beast.rotate(angle);
 	}
 
 }

@@ -9,7 +9,7 @@ public class Need {
 	private static final double CAPACITY_MAX = 100;
 	private static final double DEPLETION_MAX = 10;
 
-	final Resource resource;
+	public final Resource resource;
 	final double capacity;
 	final double depletion;
 	
@@ -21,6 +21,14 @@ public class Need {
 		depletion = MyRandom.between(1, DEPLETION_MAX);
 		level = capacity;
 	}
+	
+	public Need(Need other){
+		this.resource = other.resource;
+		capacity = other.capacity;
+		depletion = other.depletion;
+		level = capacity;
+	}
+	
 	
 	public double getDepletionRate(){
 		return level/capacity;

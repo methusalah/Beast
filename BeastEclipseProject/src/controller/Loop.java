@@ -5,7 +5,7 @@ import utils.LogUtil;
 import view.ViewPanel;
 
 public class Loop {
-	private static final double DEFAULT_FPS = 5;
+	private static final double DEFAULT_FPS = 15;
 
 	private Model model;
 	private ViewPanel view;

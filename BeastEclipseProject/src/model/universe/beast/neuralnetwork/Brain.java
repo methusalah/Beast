@@ -1,19 +1,54 @@
 package model.universe.beast.neuralnetwork;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
 import utils.MyRandom;
+import math.Angle;
+import model.universe.Universe;
+import model.universe.beast.Beast;
+import model.universe.beast.Need;
 import model.universe.beast.neuralnetwork.action.Actuator;
+import model.universe.beast.neuralnetwork.action.Harvester;
+import model.universe.beast.neuralnetwork.action.Mover;
+import model.universe.beast.neuralnetwork.action.Rotator;
+import model.universe.beast.neuralnetwork.perception.NeedSensor;
+import model.universe.beast.neuralnetwork.perception.ResourceSensor;
 import model.universe.beast.neuralnetwork.perception.Sensor;
 
 public class Brain {
 
+	public final Beast beast;
 	final List<Sensor> sensors = new ArrayList<>();
 	final List<Neuron> neurons = new ArrayList<>();
 	final List<Actuator> actuators = new ArrayList<>();
+	int serial=0;
 	
-	public Brain(){
+	
+	public Brain(Beast beast){
+		this.beast = beast; 
+		addNeuron(new Rotator(serial++, this, Angle.toRadians(10)));
+		addNeuron(new Rotator(serial++, this, Angle.toRadians(-10)));
+		addNeuron(new Rotator(serial++, this, Angle.toRadians(30)));
+		addNeuron(new Rotator(serial++, this, Angle.toRadians(-30)));
+		addNeuron(new Mover(serial++, this, 1));
+		addNeed(beast.need);
+	}
+
+	public void addNeed(Need need){
+		addNeuron(new NeedSensor(serial++, this));
+		addNeuron(new ResourceSensor(serial++, this, need.resource));
+		addNeuron(new Harvester(serial++, this, need.resource));
+	}
+	
+	public Brain(Brain other){
+		HashMap<Integer, Neuron> serializedNeurons = new HashMap<>();
+		for(Sensor s : other.sensors)
+			sensors.add(s.getClass().getConstructor().newInstance(s, this));
+		for(Sensor s : other.sensors)
+		for(Sensor s : other.sensors)
 		
 	}
 	
@@ -39,9 +74,6 @@ public class Brain {
 	}
 	
 	public void createRandomConnexions(){
-//		for(int i=0; i<MyRandom.nextInt(5); i++)
-//			addNeuron(new Neuron());
-		
 		List<Neuron> from = new ArrayList<>();
 		from.addAll(sensors);
 		from.addAll(neurons);
@@ -58,4 +90,8 @@ public class Brain {
 		}
 	}
 	
+	
+	public Brain getMutation(){
+		return new Brain(this);
+	}
 }

@@ -12,13 +12,22 @@ public class Neuron {
 	
 
 	final List<Axon> axons = new ArrayList<>();
+	final int serial;
 	final double thresold;
 	
 	boolean excitedThisTurn = false;
 	double polarisation = 0;
 	
-	public Neuron() {
+	public Neuron(int serial) {
+		this.serial = serial;
 		thresold = MyRandom.between(0, THRESOLD_MAX);
+	}
+
+	public Neuron(Neuron other) {
+		this.serial = other.serial;
+		thresold = other.thresold;
+		for(Axon a : other.axons)
+			axons.add(new Axon(a));
 	}
 	
 	public void polarize(double value){
@@ -30,6 +39,13 @@ public class Neuron {
 	
 	public void launchAxonOn(Neuron other){
 		axons.add(new Axon(MyRandom.between(POLARIZATION_MIN, POLARIZATION_MAX), other));
+	}
+	
+	public List<Integer> getPostSynapticsSerial(){
+		List<Integer> res = new ArrayList<>();
+		for(Axon a : axons)
+			res.add(a.getPostSynapticSerial());
+		return res;
 	}
 	
 	public void calm(){

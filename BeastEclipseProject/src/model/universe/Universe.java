@@ -102,25 +102,11 @@ public class Universe {
     }
 
 
-    public void setUpdated(Tile t){
-//    	if(t == null)
-//    		throw new NullPointerException();
-//		if(!updatedTiles.contains(t))
-//			updatedTiles.add(t);
-	}
-    
     public ResourceSpot getResourceSpot(Resource resource, Point2D coord){
     	Tile t = getTile(coord);
     	return t.getResourceSpot(resource);
     }
 	
-	public List<Tile> grabUpdated(){
-		List<Tile> res = new ArrayList<>();
-		res.addAll(updatedTiles);
-		updatedTiles.clear();
-		return res;
-	}
-
 	public void register(UComp comp) {
 		addToUpdates(comp);
 		getTile(comp.coord).register(comp);

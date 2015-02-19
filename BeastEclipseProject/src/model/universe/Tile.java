@@ -22,13 +22,11 @@ public class Tile {
 	public void register(UComp comp){
 		if(!comps.contains(comp))
 			comps.add(comp);
-		universe.setUpdated(this);
 	}
 
 	public void unregister(UComp comp){
-		boolean removed = comps.remove(comp);
-		if(removed)
-			universe.setUpdated(this);
+		if(!comps.remove(comp))
+			throw new RuntimeException("comp introuvable dans ce tile"+comp);
 	}
 	
 	public Tile getNorth(){

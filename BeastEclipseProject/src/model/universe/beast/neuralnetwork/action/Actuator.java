@@ -1,14 +1,15 @@
 package model.universe.beast.neuralnetwork.action;
 
-import model.universe.beast.Beast;
+import model.universe.beast.neuralnetwork.Brain;
 import model.universe.beast.neuralnetwork.Neuron;
 
 public class Actuator extends Neuron{
 	
-	final Beast beast;
+	final Brain brain;
 	
-	public Actuator(Beast beast) {
-		this.beast = beast;
+	public Actuator(int serial, Brain brain) {
+		super(serial);
+		this.brain = brain;
 	}
 
 }

@@ -1,21 +1,21 @@
 package model.universe.beast.neuralnetwork.action;
 
-import model.universe.beast.Beast;
+import model.universe.beast.neuralnetwork.Brain;
 import model.universe.resource.Resource;
 
 public class Harvester extends Actuator{
 
 	final Resource resource;
 
-	public Harvester(Beast beast, Resource resource) {
-		super(beast);
+	public Harvester(int serial, Brain brain, Resource resource) {
+		super(serial, brain);
 		this.resource = resource;
 	}
 
 	@Override
 	public void excite() {
 		super.excite();
-		beast.harvest(resource);
+		brain.beast.harvest(resource);
 	}
 	
 }

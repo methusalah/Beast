@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import tools.LogUtil;
 import geometry.Point2D;
+import math.Angle;
 import model.universe.Tile;
 import model.universe.UComp;
 import model.universe.Universe;
@@ -19,6 +20,8 @@ public class Beast extends UComp {
 	private final Brain brain;
 	private final Need need;
 	
+	private double orientation;
+	private double maxSpeed = 2;
 	
 	public Beast(Universe universe, Point2D coord) {
 		super(universe, coord);
@@ -44,6 +47,18 @@ public class Beast extends UComp {
 			return;
 		need.fulfill(spot.harvest());
 	}
+	public void rotate(Double angle){
+		orientation += angle;
+		Angle.normalize(orientation);
+	}
+
+	public void move(Double speedRate){
+		coord = coord.getTranslation(orientation, speedRate*maxSpeed);
+		coord = universe.getInBounds(coord);
+		if(!universe.isInBounds((int)coord.x, (int)coord.y))
+			throw new RuntimeException("coord is not in bounds "+coord);
+	}
+	
 
 	@Override
 	public Color getColor() {

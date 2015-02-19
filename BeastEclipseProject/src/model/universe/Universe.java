@@ -17,6 +17,7 @@ import utils.StopWatch;
 
 public class Universe {
 	private static final double RESOURCE_RATE = 0.05;
+	private static final double BEAST_RATE = 0.05;
 
 	public ResourceSet resourceSet;
 	public final int width;
@@ -58,8 +59,8 @@ public class Universe {
 			c.update();
 		}
 		
-		if(beasts.size() < 1000)
-			for(int i=0; i<1000; i++)
+		if(beasts.size() < width*height*BEAST_RATE)
+			for(int i=0; i<width*height*BEAST_RATE; i++)
 				new Beast(this, new Point2D(MyRandom.next()*(width-1), MyRandom.next()*(height-1)));
 	}
 	
@@ -76,24 +77,30 @@ public class Universe {
     }
 
     public Tile getTile(Point2D coord) {
-    	int x = (int)Math.round(coord.x);
-    	int y = (int)Math.round(coord.y);
+    	int x = (int)Math.floor(coord.x);
+    	int y = (int)Math.floor(coord.y);
     	return getTile(x, y);
     }
     
     public boolean isInBounds(int x, int y){
     	return x >= 0 && x < width && y >= 0 && y < height;
     }
+    
+    public Point2D getInBounds(Point2D coord){
+    	double x = coord.x;
+    	while(x<0) x+=width;
+    	while(x>=width) x-=width;
+    	double y = coord.y;
+    	while(y<0) y+=height;
+    	while(y>=height) y-=height;
+    	return new Point2D(x, y);
+    }
 	
     public Tile getNeightborTile(Tile t, int x, int y){
-    	x = t.x+x;
-    	while(x<0) x+=width;
-    	while(x>width-1) x-=width;
-    	y = t.y+y;
-    	while(y<0) y+=height;
-    	while(y>height-1) y-=height;
-    	return getTile(x, y);
+    	Point2D p = new Point2D(t.x,  t.y).getAddition(x, y);
+    	return getTile(getInBounds(p));
     }
+
 
     public void setUpdated(Tile t){
 //    	if(t == null)

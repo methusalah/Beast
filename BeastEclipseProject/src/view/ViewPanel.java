@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,26 +63,50 @@ public class ViewPanel extends JPanel {
 
 				g.fillRect(t.x*4, t.y*4, 4, 4);
 			}
+			int nbChild = 0;
+			int averageAge = 0;
+			int averageGen = 0;
 			for(Beast b : beasts){
 				g.setColor(b.getColor());
-				g.fillRect((int)(b.coord.x*4)+1, (int)(b.coord.y*4)+1, 2, 2);
-				if(b.age>90){
-					g.setColor(Color.GREEN);
-					g.setStroke(new BasicStroke(3));
-					int ageRadius = b.age/10;
-					g.drawOval(((int)b.coord.x-ageRadius)*4, ((int)b.coord.y-ageRadius)*4, ageRadius*2, ageRadius*2);
-					g.setStroke(new BasicStroke(1));
-				}
+				if(b.coord.getDistance(b.trail) == 0 ||
+						b.coord.getDistance(b.trail) > 4)
+					g.fillRect((int)(b.coord.x*4)+1, (int)(b.coord.y*4)+1, 2, 2);
+							
+				else					
+					g.drawLine((int)(b.coord.x*4)+2, (int)(b.coord.y*4)+2,
+							(int)(b.trail.x*4)+2, (int)(b.trail.y*4)+2);
+//				if(b.age>90){
+//					g.setStroke(new BasicStroke(3));
+//					if(b.age > 1000){
+//						g.setColor(Color.BLUE);
+//						g.drawOval(((int)b.coord.x)*4-3, ((int)b.coord.y)*4-3, 6, 6);
+//					} else {
+////						g.setColor(Color.GREEN);
+////						int ageRadius = b.age/10;
+////						g.drawOval(((int)b.coord.x)*4-ageRadius, ((int)b.coord.y)*4-ageRadius, ageRadius*2, ageRadius*2);
+//					}
+//					g.setStroke(new BasicStroke(1));
+//				}
+				if(b.gen>0)
+					nbChild++;
+				averageAge += b.age;
+				averageGen += b.gen;
+				
 				maxAge = Math.max(maxAge, b.age);
 			}
-			g.setColor(Color.BLACK);
-			g.fillRect(4, getHeight()-4-12, getWidth()-8, 12);
+			averageAge /= beasts.size();
+			averageGen /= beasts.size();
+//			g.setColor(Color.BLACK);
+//			g.fillRect(4, getHeight()-4-12, getWidth()-8, 12);
 			
-			g.setColor(Color.WHITE);
-			g.setFont(new Font("Arial",Font.PLAIN,12));
+			g.setColor(Color.black);
+			g.setFont(new Font("Arial",Font.BOLD,15));
 			double elapsed = System.currentTimeMillis()-timer;
 			int turnPerSec = (int)Math.round(model.universe.grabTurnCounter()/(elapsed/1000));
-			g.drawString("  "+turnPerSec+" turn/s. Turn "+model.universe.turn+" MaxAge:"+maxAge+" active spots : "+model.universe.toUpdateSpots.size()+" beasts : "+model.universe.beasts.size(), 0+4,  getHeight()-4);
+			g.drawString(turnPerSec+" turn/s. Turn "+model.universe.turn, 4,  getHeight()-24);
+			g.drawString("Average age: "+averageAge+"; average gen: "+averageGen, 4,  getHeight()-12);
+			DecimalFormat df = new DecimalFormat("0");
+			g.drawString("Natural Beasts: "+nbChild+"("+df.format(100*nbChild/model.universe.beasts.size())+"%)", 4,  getHeight());
 		}
 		chrono = new StopWatch("View");
 		timer = System.currentTimeMillis();

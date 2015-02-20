@@ -1,14 +1,19 @@
 package model.universe.beast.neuralnetwork;
 
-public class Axon {
+import utils.MyRandom;
 
-	final double polarizationValue;
+public class Axon {
+	private static final double POLARIZATION_MIN = -50; 
+	private static final double POLARIZATION_MAX = 50; 
+	
+
+	double polarizationValue;
 	Neuron postSynaptic;
 	int serial;
 	
-	public Axon(double polarizationValue, Neuron postSynaptic) {
-		this.polarizationValue = polarizationValue;
+	public Axon(Neuron postSynaptic) {
 		this.postSynaptic = postSynaptic;
+		setRandomPolarisationValue();
 	}
 	public Axon(Axon other) {
 		this.polarizationValue = other.polarizationValue;
@@ -20,6 +25,14 @@ public class Axon {
 	}
 	
 	public int getPostSynapticSerial(){
-		return postSynaptic.serial;
+		if(postSynaptic == null)
+			return serial;
+		else
+			return postSynaptic.serial;
 	}
+	
+	public void setRandomPolarisationValue(){
+		polarizationValue = MyRandom.between(POLARIZATION_MIN, POLARIZATION_MAX);
+	}
+
 }

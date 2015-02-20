@@ -29,8 +29,13 @@ public class ResourceSpot extends UComp {
 		q = Math.min(q, resource.qMax);
 		q = Math.max(q, 0);
 		
-		if(q == 0 && resource.canDisapear)
-			destroy();
+		if(q == 0)
+			if(resource.canDisapear || resource.qGrowth <= 0)
+				destroy();
+			else{
+				delay = 100000;
+				return;
+			}
 		
 		if(q == resource.qMax)
 			if(resource.canExpand){
@@ -69,6 +74,7 @@ public class ResourceSpot extends UComp {
 			if(resource.canDisapear)
 				destroy();
 		}
+		askUpdate();
 		return harvested;
 	}
 

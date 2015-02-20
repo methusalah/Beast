@@ -8,6 +8,7 @@ public abstract class UComp {
 
 	public Point2D coord;
 	public final Universe universe;
+	private boolean updated = true;
 
 	public UComp(Universe universe, Point2D coord) {
 		this.universe = universe;
@@ -17,10 +18,14 @@ public abstract class UComp {
 	public abstract void update();
 	
 	protected void avoidUpdate(){
+		updated = false;
 		universe.removeFromUpdates(this);
 	}
 	
 	protected void askUpdate(){
+		if(updated)
+			return;
+		updated = true;
 		universe.addToUpdates(this);
 	}
 	

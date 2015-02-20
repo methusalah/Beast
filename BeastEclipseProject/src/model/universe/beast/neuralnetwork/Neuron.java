@@ -7,20 +7,19 @@ import utils.MyRandom;
 
 public class Neuron {
 	protected static final double THRESOLD_MAX = 100;
-	private static final double POLARIZATION_MIN = -50; 
-	private static final double POLARIZATION_MAX = 50; 
 	
 
 	final List<Axon> axons = new ArrayList<>();
+	final List<Neuron> preSynaptics = new ArrayList<>();
 	final public int serial;
-	final double thresold;
+	double thresold;
 	
 	boolean excitedThisTurn = false;
 	double polarisation = 0;
 	
 	public Neuron(int serial) {
 		this.serial = serial;
-		thresold = MyRandom.between(0, THRESOLD_MAX);
+		setRandomThresold();
 	}
 
 	public Neuron(Neuron other) {
@@ -38,7 +37,19 @@ public class Neuron {
 	}
 	
 	public void launchAxonOn(Neuron other){
-		axons.add(new Axon(MyRandom.between(POLARIZATION_MIN, POLARIZATION_MAX), other));
+		axons.add(new Axon(other));
+		other.preSynaptics.add(this);
+	}
+	
+	public void retireAxonOn(Neuron other){
+		Axon toRetire = null;
+		for(Axon a : axons)
+			if(a.postSynaptic == other){
+				toRetire = a;
+				break;
+			}
+		axons.remove(toRetire);
+		
 	}
 	
 	public List<Integer> getPostSynapticsSerial(){
@@ -59,5 +70,9 @@ public class Neuron {
 			for(Axon a : axons)
 				a.activate();
 		}
+	}
+	
+	public void setRandomThresold(){
+		thresold = MyRandom.between(0, THRESOLD_MAX);		
 	}
 }

@@ -11,6 +11,10 @@ public class Harvester extends Actuator{
 		super(serial, brain);
 		this.resource = resource;
 	}
+	public Harvester(Harvester other, Brain newBrain) {
+		super(other, newBrain);
+		this.resource = other.resource;
+	}
 
 	@Override
 	public void excite() {

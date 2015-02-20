@@ -11,6 +11,10 @@ public class Mover extends Actuator {
 		super(serial, brain);
 		this.speedRate = speedRate;
 	}
+	public Mover(Mover other, Brain newBrain) {
+		super(other, newBrain);
+		this.speedRate = other.speedRate;
+	}
 
 	@Override
 	public void excite() {

@@ -7,9 +7,9 @@ public abstract class Sensor extends Neuron{
 	
 	final Brain brain;
 	
-	public Sensor(int serial, Brain brain) {
+	public Sensor(int serial, Brain newBrain) {
 		super(serial);
-		this.brain = brain;
+		this.brain = newBrain;
 	}
 	
 	public Sensor(Sensor other, Brain newBrain){
@@ -18,6 +18,4 @@ public abstract class Sensor extends Neuron{
 	}
 
 	public abstract void stimulate();
-	
-	public abstract Sensor getClone();
 }

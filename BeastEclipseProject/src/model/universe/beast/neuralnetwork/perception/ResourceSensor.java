@@ -14,6 +14,10 @@ public class ResourceSensor extends ExternalSensor {
 		super(serial, brain);
 		this.resource = resource;
 	}
+	public ResourceSensor(ResourceSensor other, Brain newBrain) {
+		super(other, newBrain);
+		this.resource = other.resource;
+	}
 
 	@Override
 	public void stimulate() {

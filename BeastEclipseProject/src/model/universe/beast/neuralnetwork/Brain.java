@@ -43,12 +43,18 @@ public class Brain {
 		addNeuron(new Harvester(serial++, this, need.resource));
 	}
 	
-	public Brain(Brain other){
+	public Brain(Brain other, Beast newBeast){
+		beast = newBeast;
 		HashMap<Integer, Neuron> serializedNeurons = new HashMap<>();
-		for(Sensor s : other.sensors)
-			sensors.add(s.getClass().getConstructor().newInstance(s, this));
-		for(Sensor s : other.sensors)
-		for(Sensor s : other.sensors)
+		for(Sensor s : other.sensors){
+			Sensor copy = (Sensor) NeuronFactory.getCopy(s, this);
+			serializedNeurons.put(copy.serial, copy);
+			sensors.add(copy);
+		}
+		for(Neuron n : other.neurons)
+			neurons.add(NeuronFactory.getCopy(n, this));
+		for(Actuator a : other.actuators)
+			actuators.add((Actuator) NeuronFactory.getCopy(a, this));
 		
 	}
 	
@@ -91,7 +97,7 @@ public class Brain {
 	}
 	
 	
-	public Brain getMutation(){
-		return new Brain(this);
+	public Brain getMutation(Beast beast){
+		return new Brain(this, beast);
 	}
 }

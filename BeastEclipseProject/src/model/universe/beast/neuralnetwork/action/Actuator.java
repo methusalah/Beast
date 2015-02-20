@@ -11,5 +11,9 @@ public class Actuator extends Neuron{
 		super(serial);
 		this.brain = brain;
 	}
+	public Actuator(Actuator other, Brain newBrain) {
+		super(other);
+		this.brain = newBrain;
+	}
 
 }

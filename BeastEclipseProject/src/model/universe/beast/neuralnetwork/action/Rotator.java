@@ -1,6 +1,5 @@
 package model.universe.beast.neuralnetwork.action;
 
-import model.universe.beast.Beast;
 import model.universe.beast.neuralnetwork.Brain;
 
 
@@ -11,6 +10,10 @@ public class Rotator extends Actuator {
 	public Rotator(int serial, Brain brain, double angle) {
 		super(serial, brain);
 		this.angle = angle;
+	}
+	public Rotator(Rotator other, Brain newBrain) {
+		super(other, newBrain);
+		this.angle = other.angle;
 	}
 
 	@Override

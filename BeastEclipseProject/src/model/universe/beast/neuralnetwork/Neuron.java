@@ -12,7 +12,7 @@ public class Neuron {
 	
 
 	final List<Axon> axons = new ArrayList<>();
-	final int serial;
+	final public int serial;
 	final double thresold;
 	
 	boolean excitedThisTurn = false;

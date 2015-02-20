@@ -36,7 +36,7 @@ public class Beast extends UComp {
 	public Beast(Beast parent){
 		super(parent.universe, parent.coord);
 		need = new Need(parent.need);
-		brain = parent.brain.getMutation();
+		brain = parent.brain.getMutation(this);
 	}
 	
 

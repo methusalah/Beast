@@ -71,7 +71,7 @@ public class ResourceSpot extends UComp {
 		if(q < 0){
 			harvested+=q;
 			q = 0;
-			if(resource.canDisapear)
+//			if(resource.canDisapear)
 				destroy();
 		}
 		askUpdate();

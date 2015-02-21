@@ -124,13 +124,15 @@ public class Brain {
 		all.get(MyRandom.nextInt(all.size())).setRandomThresold();
 	}
 	private void deleteNeuron(){
-		if(!neurons.isEmpty()){
-			int i = MyRandom.nextInt(neurons.size());
-			Neuron n = neurons.get(i);
-			neurons.remove(i);
-			for(Neuron pre : n.preSynaptics)
-				pre.retireAxonOn(n);
+		if(neurons.isEmpty()){
+			mutateRandomly();
+			return;
 		}
+		int i = MyRandom.nextInt(neurons.size());
+		Neuron n = neurons.get(i);
+		neurons.remove(i);
+		for(Neuron pre : n.preSynaptics)
+			pre.retireAxonOn(n);
 	}
 	private void addNeuron(){
 		Neuron n = new Neuron(serial++);
@@ -144,32 +146,42 @@ public class Brain {
 	}
 	private void mutateAxon(){
 		List<Axon> axons = preSynaptics.get(MyRandom.nextInt(preSynaptics.size())).axons; 
+		if(axons.isEmpty()){
+			mutateRandomly();
+			return;
+		}
 		Axon a = axons.get(MyRandom.nextInt(axons.size()));
 		a.setRandomPolarisationValue();
 	}
 	private void deleteAxon(){
-		List<Axon> axons = preSynaptics.get(MyRandom.nextInt(preSynaptics.size())).axons; 
+		Neuron n = preSynaptics.get(MyRandom.nextInt(preSynaptics.size()));
+		List<Axon> axons = n.axons;
+		if(axons.isEmpty()){
+			mutateRandomly();
+			return;
+		}
 		axons.remove(MyRandom.nextInt(axons.size()));
 	}
 	private void addAxon(){
 		preSynaptics.get(MyRandom.nextInt(preSynaptics.size())).launchAxonOn(postSynaptics.get(MyRandom.nextInt(postSynaptics.size())));
 	}
 	
-	
+	private void mutateRandomly(){
+		int mutation = MyRandom.nextInt(6);
+		switch(mutation){
+		case 0: mutateNeuron(); break;
+		case 1: deleteNeuron(); break;
+		case 2: addNeuron(); break;
+		case 3: mutateAxon(); break;
+		case 4: deleteAxon(); break;
+		case 5: addAxon(); break;
+		default: throw new RuntimeException();
+		}
+	}
 	
 	public Brain getMutation(Beast beast){
 		Brain res = new Brain(this, beast);
-		int mutation = MyRandom.nextInt(6);
-		switch(mutation){
-		case 0: res.mutateNeuron(); break;
-		case 1: res.deleteNeuron(); break;
-		case 2: res.addNeuron(); break;
-		case 3: res.mutateAxon(); break;
-		case 4: res.deleteAxon(); break;
-		case 5: res.addAxon(); break;
-		default: throw new RuntimeException();
-		}
-		
+		res.mutateRandomly();
 		classifyNeurons();
 		return res;
 	}

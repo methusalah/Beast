@@ -59,9 +59,11 @@ public class Universe {
 			c.update();
 		}
 		
+		int newBeastToCreate = 10;
 		if(beasts.size() < width*height*BEAST_RATE)
-			for(int i=0; i<width*height*BEAST_RATE; i++)
-				new Beast(this, new Point2D(MyRandom.next()*(width-1), MyRandom.next()*(height-1)));
+			newBeastToCreate = (int)(width*height*BEAST_RATE);
+		for(int i=0; i<newBeastToCreate; i++)
+			new Beast(this, new Point2D(MyRandom.next()*(width-1), MyRandom.next()*(height-1)));
 	}
 	
 	public int grabTurnCounter(){

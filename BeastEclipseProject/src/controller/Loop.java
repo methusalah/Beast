@@ -5,7 +5,7 @@ import utils.LogUtil;
 import view.ViewPanel;
 
 public class Loop {
-	private static final double DEFAULT_FPS = 15;
+	private static final double DEFAULT_FPS = 25;
 
 	private Model model;
 	private ViewPanel view;
@@ -25,7 +25,7 @@ public class Loop {
 					@Override
 					public void run() {
 						while (true) {
-							try {
+//							try {
 								synchronized (model) {
 									model.universe.update();
 								}
@@ -35,10 +35,10 @@ public class Loop {
 									view.repaint();
 									lastRepaint = System.currentTimeMillis();
 								}
-							} catch (Exception e) {
-								// OK something went wrong... we're not going to stop everything for such a small thing, are we ?
-								e.printStackTrace();
-							}
+//							} catch (Exception e) {
+//								// OK something went wrong... we're not going to stop everything for such a small thing, are we ?
+//								e.printStackTrace();
+//							}
 						}
 					}
 				}		

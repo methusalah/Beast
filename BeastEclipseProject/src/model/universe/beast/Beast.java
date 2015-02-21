@@ -56,10 +56,11 @@ public class Beast extends UComp {
 		if(need.getDepletionRate() <= 0)
 			destroy();
 		age++;
-		if(age==100 ||
-				age==300 ||
-				age==500 ||
-				age==700)
+		if(age==1000||
+				age==2000 ||
+				age==3000 ||
+				age==4000 ||
+				age==5000)
 			reproduce();
 		if(age > 5000)
 			destroy();

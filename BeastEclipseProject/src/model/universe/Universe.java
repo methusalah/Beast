@@ -33,7 +33,7 @@ public class Universe {
 		this.width = width;
 		this.height = height;
 		
-		resourceSet = new ResourceSet();
+		resourceSet = new ResourceSet(false);
 		
         for(int y=0; y<height; y++)
             for(int x=0; x<width; x++){
@@ -130,4 +130,9 @@ public class Universe {
 			beasts.remove(comp);
 	}
 	
+	public void manageCorpse(Beast b){
+		for(Resource r : resourceSet.resources)
+			if(r.spontaneousOnCorpse)
+            	new ResourceSpot(this, b.coord, r);
+	}
 }

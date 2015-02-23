@@ -22,6 +22,7 @@ public class Beast extends UComp {
 	private double maxSpeed = 2;
 	public int age = 0;
 	public int gen = 0;
+	public int dinoGen = 0;
 	public Point2D trail;
 	
 	int nextReproduction = 0;
@@ -29,7 +30,7 @@ public class Beast extends UComp {
 	
 	public Beast(Universe universe, Point2D coord) {
 		super(universe, coord);
-		need = new Need(universe.resourceSet.getRandomResource());
+		need = new Need(universe.resourceSet.getRandomResource(), false);
 		brain = new Brain(this);
 		orientation = MyRandom.between(-Angle.FLAT, Angle.FLAT);
 		trail = coord;
@@ -45,6 +46,7 @@ public class Beast extends UComp {
 		} else {
 			brain = parent.brain.getIdentical(this);
 			gen = parent.gen;
+			dinoGen = parent.dinoGen+1;
 		}
 		orientation = MyRandom.between(-Angle.FLAT, Angle.FLAT);
 		move(MyRandom.between(1d, 2d));
@@ -60,7 +62,7 @@ public class Beast extends UComp {
 		need.deplete();
 		if(need.getDepletionRate() <= 0 ||
 				age > 5000)
-			destroy();
+			die();
 		
 		age++;
 		if(age == nextReproduction){
@@ -69,6 +71,11 @@ public class Beast extends UComp {
 		}
 		if(age == 5000)
 			creatClone();
+	}
+	
+	private void die(){
+		destroy();
+		universe.manageCorpse(this);
 	}
 	
 	public void harvest(Resource resource, double power){
@@ -85,6 +92,8 @@ public class Beast extends UComp {
 
 	public void move(double power){
 		Point2D newCoord = universe.getInBounds(coord.getTranslation(orientation, maxSpeed*power));
+		need.deplete(power);
+		
 		Tile previous = universe.getTile(coord); 
 		Tile newTile = universe.getTile(newCoord);
 		if(previous != newTile){

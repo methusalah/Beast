@@ -1,6 +1,7 @@
 package app;
 
 
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,8 +16,9 @@ public class BeastMain {
 
 		Logger.getLogger("").setLevel(Level.INFO);
 		LogUtil.init();
-		MyRandom.changeSeed(7);
-		LogUtil.logger.info("Seed : "+MyRandom.SEED);
+		int seed = (int)(Math.random()*10000000);
+		MyRandom.changeSeed(seed);
+		LogUtil.logger.info("Seed : "+seed);
 		
 		Model model = new Model(150, 50);
 		

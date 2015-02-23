@@ -32,7 +32,7 @@ public class ResourceSpot extends UComp {
 		q = Math.max(q, 0);
 		
 		if(q == 0)
-			if(resource.canDisapear || resource.qGrowth <= 0)
+			if(resource.qGrowth <= 0)
 				destroy();
 			else{
 				delay = 100000;

@@ -1,5 +1,7 @@
 package model.universe.beast;
 
+import java.text.DecimalFormat;
+
 import math.MyRandom;
 import model.universe.resource.Resource;
 
@@ -14,10 +16,16 @@ public class Need {
 	
 	double level;
 	
-	public Need(Resource resource) {
+	public Need(Resource resource, boolean random) {
 		this.resource = resource;
-		capacity = MyRandom.between(1, CAPACITY_MAX);
-		depletion = MyRandom.between(1, DEPLETION_MAX);
+		if(random){
+			capacity = MyRandom.between(1, CAPACITY_MAX);
+			depletion = MyRandom.between(1, DEPLETION_MAX);
+		} else {
+			capacity = 100;
+			depletion = 2;
+		}
+			
 		level = capacity;
 	}
 	
@@ -33,12 +41,26 @@ public class Need {
 		return level/capacity;
 	}
 	
+	public void deplete(double rate){
+		level -= depletion*rate;
+	}
 	public void deplete(){
-		level -= depletion;
+		deplete(1);
 	}
 	
 	public void fulfill(double val){
 		level += val;
 		level = Math.min(level, capacity);
+	}
+	
+	@Override
+	public String toString() {
+		String ls=System.getProperty("line.separator");
+		DecimalFormat ds = new DecimalFormat("0.00");
+		String res = this.getClass().getSimpleName()+" description : "+ls;
+		res = res.concat("    Capacity : "+ds.format(capacity)+ls);
+		res = res.concat("    Depletion : "+ds.format(depletion)+ls);
+		res = res.concat(resource.toString());
+		return res;
 	}
 }

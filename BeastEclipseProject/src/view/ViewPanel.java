@@ -42,13 +42,14 @@ public class ViewPanel extends JPanel {
 	public void paint(Graphics g1) {
 		Graphics2D g = (Graphics2D)g1;
 		synchronized(model) {
+			double elapsed = System.currentTimeMillis()-timer;
+			int turnPerSec = (int)Math.round(model.universe.grabTurnCounter()/(elapsed/1000));
+
 			resourceDrawer.draw(g);
 			beastDrawer.draw(g, getHeight());
 			
 			g.setColor(Color.WHITE);
 			g.setFont(new Font("Arial",Font.BOLD,15));
-			double elapsed = System.currentTimeMillis()-timer;
-			int turnPerSec = (int)Math.round(model.universe.grabTurnCounter()/(elapsed/1000));
 			g.drawString(turnPerSec+" turn/s. Turn "+model.universe.turn+" ResourceSetCount: "+model.universe.resourceSet.getCount(), 4,  getHeight()-300+12);
 			g.drawString("Max gen: "+beastDrawer.maxGen, 4,  getHeight()-300+24);
 			DecimalFormat df = new DecimalFormat("0");

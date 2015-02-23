@@ -14,8 +14,7 @@ public class Mover extends Actuator {
 	}
 
 	@Override
-	public void excite() {
-		super.excite();
+	protected void triggerAction() {
 		brain.beast.move(power);
 	}
 

@@ -14,7 +14,7 @@ public class Neuron {
 	final public int serial;
 	double thresold;
 	
-	boolean excitedThisTurn = false;
+	protected boolean excitedThisTurn = false;
 	double polarisation = 0;
 	
 	public Neuron(int serial) {
@@ -59,12 +59,12 @@ public class Neuron {
 		return res;
 	}
 	
-	public void calm(){
+	protected void calm(){
 		polarisation = 0;
 		excitedThisTurn = false;
 	}
 	
-	public void excite(){
+	protected void excite(){
 		if(!excitedThisTurn){
 			excitedThisTurn = true;
 			for(Axon a : axons)

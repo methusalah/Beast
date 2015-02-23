@@ -2,7 +2,9 @@ package view;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import tools.LogUtil;
@@ -15,6 +17,7 @@ public class BeastDrawer {
 	int naturalBeatsCount;
 	int maxAge;
 	int maxGen;
+	Beast dino;
 	
 	ArrayList<Integer> agesTable = new ArrayList<>(); 
 	ArrayList<Integer> genTable = new ArrayList<>(); 
@@ -59,20 +62,18 @@ public class BeastDrawer {
 				genTable.set(b.gen, genTable.get(b.gen)+1);
 			int scaledAge = (int)Math.floor((double)b.age/10); 
 			agesTable.set(scaledAge, genTable.get(scaledAge)+1);
+			if(dino == null || b.dinoGen > dino.dinoGen)
+				dino = b;
 			
 		}
 
+		int ceil = 300;
 		int i = 0;
 		int x = 0;
 		for(Integer age : agesTable){
 			// ground
-			int ceil = 300;
 			g.setColor(Color.BLACK);
 			g.fillRect(x, height-ceil, 2, ceil);
-			// age
-			age = Math.min(ceil, age);
-			g.setColor(Color.WHITE);
-			g.fillRect(x, height-age, 2, height-age);
 			// gen
 			int gen = genTable.get(i);
 			gen = Math.min(ceil, gen);
@@ -81,6 +82,15 @@ public class BeastDrawer {
 			x+=2;
 			i++;
 		}
+		
+		g.setColor(dino.need.resource.color);
+		g.setFont(new Font("Arial",Font.BOLD,15));
+		drawString(g, ""+dino.need, 400,  height-ceil+24);
+	}
+	
+	void drawString(Graphics2D g, String text, int x, int y) {
+	    for (String line : text.split("\n"))
+	        g.drawString(line, x, y += g.getFontMetrics().getHeight());
 	}
 
 }

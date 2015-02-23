@@ -4,9 +4,10 @@ import math.MyRandom;
 import model.universe.beast.neuralnetwork.Brain;
 import model.universe.beast.neuralnetwork.Neuron;
 
-public class Actuator extends Neuron {
+public abstract class Actuator extends Neuron {
 	
 	double power;
+	
 	
 	final Brain brain; 
 	
@@ -24,5 +25,15 @@ public class Actuator extends Neuron {
 	public void setRandomPower(){
 		power = MyRandom.next();
 	}
+	
+	@Override
+	protected void excite() {
+		if(!excitedThisTurn){
+			excitedThisTurn = true;
+			triggerAction();
+		}
+	}
+	
+	protected abstract void triggerAction();
 
 }

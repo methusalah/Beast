@@ -1,6 +1,6 @@
 package model.universe.beast.neuralnetwork;
 
-import utils.MyRandom;
+import math.MyRandom;
 
 public class Axon {
 	private static final double POLARIZATION_MIN = -50; 

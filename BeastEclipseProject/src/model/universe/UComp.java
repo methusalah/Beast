@@ -1,8 +1,8 @@
 package model.universe;
 
-import java.awt.Color;
-
 import geometry.Point2D;
+
+import java.awt.Color;
 
 public abstract class UComp {
 

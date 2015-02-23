@@ -1,12 +1,13 @@
 package model.universe.resource;
 
+import geometry.Point2D;
+
 import java.awt.Color;
 
-import geometry.Point2D;
+import math.MyRandom;
 import model.universe.Tile;
 import model.universe.UComp;
 import model.universe.Universe;
-import utils.MyRandom;
 
 public class ResourceSpot extends UComp {
 
@@ -18,6 +19,7 @@ public class ResourceSpot extends UComp {
 		super(universe, coord);
 		this.resource = resource;
 		q = resource.qStart;
+		resource.registerSpot();
 	}
 	
 	@Override
@@ -65,8 +67,8 @@ public class ResourceSpot extends UComp {
 		return q/resource.qMax;
 	}
 	
-	public double harvest(){
-		double harvested = resource.qHarvest;
+	public double harvest(double power){
+		double harvested = resource.qHarvest*power;
 		q -= harvested;
 		if(q < 0){
 			harvested+=q;
@@ -81,5 +83,11 @@ public class ResourceSpot extends UComp {
 	@Override
 	public Color getColor() {
 		return resource.color;
+	}
+	
+	@Override
+	protected void destroy() {
+		super.destroy();
+		resource.unregisterSpot();
 	}
 }

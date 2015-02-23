@@ -2,7 +2,7 @@ package model.universe.resource;
 
 import java.awt.Color;
 
-import utils.MyRandom;
+import math.MyRandom;
 
 public class Resource {
 
@@ -17,6 +17,7 @@ public class Resource {
 	private static double SPONTANEOUS_PROB = 0.5;
 	private static double SPONTANEOUS_ON_CORPSE_PROB = 0.1;
 	
+	public final ResourceSet set;
 	public final int id;
 	public final Color color;
 	public final double qStart;
@@ -29,7 +30,10 @@ public class Resource {
 	public final boolean spontaneous;
 	public final boolean spontaneousOnCorpse;
 	
-	public Resource(ResourceIDManager manager){
+	public int spotCount = 0;
+	
+	public Resource(ResourceSet set, ResourceIDManager manager){
+		this.set = set;
 		id = manager.giveNewID();
 		color = new Color(MyRandom.between(100, 255),
 				MyRandom.between(100, 255),
@@ -45,6 +49,15 @@ public class Resource {
 
 		spontaneous = MyRandom.next()<SPONTANEOUS_PROB;
 		spontaneousOnCorpse = MyRandom.next()<SPONTANEOUS_ON_CORPSE_PROB;
+	}
+	
+	public void registerSpot(){
+		spotCount++;
+	}
+	public void unregisterSpot(){
+		spotCount--;
+		if(spotCount == 0)
+			set.deleteResource(this);
 	}
 	
 }

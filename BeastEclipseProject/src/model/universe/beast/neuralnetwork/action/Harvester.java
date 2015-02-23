@@ -19,7 +19,7 @@ public class Harvester extends Actuator{
 	@Override
 	public void excite() {
 		super.excite();
-		brain.beast.harvest(resource);
+		brain.beast.harvest(resource, power);
 	}
 	
 }

@@ -1,6 +1,5 @@
 package model;
 
-import utils.LogUtil;
 import model.universe.Universe;
 
 

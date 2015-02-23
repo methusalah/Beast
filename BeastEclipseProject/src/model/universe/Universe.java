@@ -3,17 +3,14 @@ package model.universe;
 
 import geometry.Point2D;
 
-import java.nio.file.ReadOnlyFileSystemException;
 import java.util.ArrayList;
 import java.util.List;
 
+import math.MyRandom;
 import model.universe.beast.Beast;
 import model.universe.resource.Resource;
 import model.universe.resource.ResourceSet;
 import model.universe.resource.ResourceSpot;
-import utils.LogUtil;
-import utils.MyRandom;
-import utils.StopWatch;
 
 public class Universe {
 	private static final double RESOURCE_RATE = 0.05;
@@ -26,8 +23,8 @@ public class Universe {
 	public final List<Tile> tiles = new ArrayList<>();
 	private final List<Tile> updatedTiles = new ArrayList<>();
 	
-	public final List<UComp> toUpdateSpots = new ArrayList<>();
-	public final List<UComp> beasts = new ArrayList<>();
+	public final List<ResourceSpot> toUpdateSpots = new ArrayList<>();
+	public final List<Beast> beasts = new ArrayList<>();
 	
 	public int turn = 0;
 	public int turnCounter = 0;
@@ -121,9 +118,9 @@ public class Universe {
 	
 	public void addToUpdates(UComp comp){
 		if(comp instanceof ResourceSpot)
-			toUpdateSpots.add(comp);
+			toUpdateSpots.add((ResourceSpot)comp);
 		else
-			beasts.add(comp);
+			beasts.add((Beast)comp);
 	}
 	
 	public void removeFromUpdates(UComp comp){

@@ -1,20 +1,15 @@
 package model.universe.beast;
 
+import geometry.Point2D;
+
 import java.awt.Color;
 
-import tools.LogUtil;
-import utils.MyRandom;
-import geometry.Point2D;
 import math.Angle;
+import math.MyRandom;
 import model.universe.Tile;
 import model.universe.UComp;
 import model.universe.Universe;
 import model.universe.beast.neuralnetwork.Brain;
-import model.universe.beast.neuralnetwork.action.Harvester;
-import model.universe.beast.neuralnetwork.action.Mover;
-import model.universe.beast.neuralnetwork.action.Rotator;
-import model.universe.beast.neuralnetwork.perception.NeedSensor;
-import model.universe.beast.neuralnetwork.perception.ResourceSensor;
 import model.universe.resource.Resource;
 import model.universe.resource.ResourceSpot;
 
@@ -29,22 +24,32 @@ public class Beast extends UComp {
 	public int gen = 0;
 	public Point2D trail;
 	
+	int nextReproduction = 0;
+	
+	
 	public Beast(Universe universe, Point2D coord) {
 		super(universe, coord);
 		need = new Need(universe.resourceSet.getRandomResource());
 		brain = new Brain(this);
 		orientation = MyRandom.between(-Angle.FLAT, Angle.FLAT);
 		trail = coord;
+		setNextReproduction();
 	}
 	
-	public Beast(Beast parent){
+	public Beast(Beast parent, boolean mutate){
 		super(parent.universe, parent.coord);
-		gen = parent.gen+1;
 		need = new Need(parent.need);
-		brain = parent.brain.getMutation(this);
+		if(mutate){
+			brain = parent.brain.getMutation(this);
+			gen = parent.gen+1;
+		} else {
+			brain = parent.brain.getIdentical(this);
+			gen = parent.gen;
+		}
 		orientation = MyRandom.between(-Angle.FLAT, Angle.FLAT);
 		move(MyRandom.between(1d, 2d));
 		trail = coord;
+		setNextReproduction();
 	}
 	
 
@@ -53,32 +58,33 @@ public class Beast extends UComp {
 		trail = coord;
 		brain.stimulate();
 		need.deplete();
-		if(need.getDepletionRate() <= 0)
+		if(need.getDepletionRate() <= 0 ||
+				age > 5000)
 			destroy();
+		
 		age++;
-		if(age==1000||
-				age==2000 ||
-				age==3000 ||
-				age==4000 ||
-				age==5000)
-			reproduce();
-		if(age > 5000)
-			destroy();
+		if(age == nextReproduction){
+			creatChild();
+			setNextReproduction();
+		}
+		if(age == 5000)
+			creatClone();
 	}
 	
-	public void harvest(Resource resource){
+	public void harvest(Resource resource, double power){
 		ResourceSpot spot = universe.getResourceSpot(resource, coord);
 		if(spot == null)
 			return;
-		need.fulfill(spot.harvest());
+		need.fulfill(spot.harvest(power));
 	}
-	public void rotate(Double angle){
-		orientation += angle;
+	public void rotate(double power){
+		power -= 0.5;
+		orientation += Angle.FLAT*power;
 		Angle.normalize(orientation);
 	}
 
-	public void move(Double speedRate){
-		Point2D newCoord = universe.getInBounds(coord.getTranslation(orientation, speedRate*maxSpeed));
+	public void move(double power){
+		Point2D newCoord = universe.getInBounds(coord.getTranslation(orientation, maxSpeed*power));
 		Tile previous = universe.getTile(coord); 
 		Tile newTile = universe.getTile(newCoord);
 		if(previous != newTile){
@@ -91,7 +97,8 @@ public class Beast extends UComp {
 
 	@Override
 	public Color getColor() {
-		return Color.RED;
+		int red = (int)(255*need.getDepletionRate());
+		return new Color(red, 0, 0);
 	}
 
 	@Override
@@ -99,7 +106,14 @@ public class Beast extends UComp {
 		return 3;
 	}
 	
-	private void reproduce(){
-		new Beast(this);
+	private void creatChild(){
+		new Beast(this, true);
+	}
+	private void creatClone(){
+		new Beast(this, false);
+	}
+	
+	private void setNextReproduction(){
+		nextReproduction += MyRandom.between(900, 1000);
 	}
 }

@@ -1,7 +1,6 @@
 package model.universe.beast;
 
-import tools.LogUtil;
-import utils.MyRandom;
+import math.MyRandom;
 import model.universe.resource.Resource;
 
 public class Need {

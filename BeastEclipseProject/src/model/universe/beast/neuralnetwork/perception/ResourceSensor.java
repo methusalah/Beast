@@ -1,7 +1,5 @@
 package model.universe.beast.neuralnetwork.perception;
 
-import model.universe.Universe;
-import model.universe.beast.Beast;
 import model.universe.beast.neuralnetwork.Brain;
 import model.universe.resource.Resource;
 import model.universe.resource.ResourceSpot;

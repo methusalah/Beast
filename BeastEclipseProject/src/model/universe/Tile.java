@@ -3,9 +3,9 @@ package model.universe;
 import java.util.ArrayList;
 import java.util.List;
 
+import math.MyRandom;
 import model.universe.resource.Resource;
 import model.universe.resource.ResourceSpot;
-import utils.MyRandom;
 
 public class Tile {
 

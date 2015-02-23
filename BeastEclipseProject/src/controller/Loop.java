@@ -1,14 +1,18 @@
 package controller;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import model.Model;
-import utils.LogUtil;
 import view.ViewPanel;
 
-public class Loop {
+public class Loop implements KeyListener {
 	private static final double DEFAULT_FPS = 25;
 
 	private Model model;
 	private ViewPanel view;
+	
+	private boolean realtime = false;
 	
 	long lastRepaint;
 	double fps = DEFAULT_FPS;
@@ -25,23 +29,44 @@ public class Loop {
 					@Override
 					public void run() {
 						while (true) {
-//							try {
+							if(!realtime)
 								synchronized (model) {
 									model.universe.update();
 								}
-								
-								double elpasedTime = System.currentTimeMillis()-lastRepaint;
-								if(elpasedTime > 1000/fps){
-									view.repaint();
-									lastRepaint = System.currentTimeMillis();
+							double elpasedTime = System.currentTimeMillis()-lastRepaint;
+							if(elpasedTime > 1000/fps){
+								synchronized (model) {
+									model.universe.update();
 								}
-//							} catch (Exception e) {
-//								// OK something went wrong... we're not going to stop everything for such a small thing, are we ?
-//								e.printStackTrace();
-//							}
+								view.repaint();
+								lastRepaint = System.currentTimeMillis();
+							}
 						}
 					}
 				}		
 			).start();
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if (e.isShiftDown())
+			switch(e.getKeyChar()){
+			case ' ': ; break;
+			}
+		else
+			switch(e.getKeyCode()){
+			case KeyEvent.VK_SPACE: realtime = !realtime; break;
+			case KeyEvent.VK_A: fps++; break;
+			case KeyEvent.VK_Q: fps--; break;
+			}
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
 	}	
 }

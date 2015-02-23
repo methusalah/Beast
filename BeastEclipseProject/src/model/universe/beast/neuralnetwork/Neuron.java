@@ -3,7 +3,7 @@ package model.universe.beast.neuralnetwork;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.MyRandom;
+import math.MyRandom;
 
 public class Neuron {
 	protected static final double THRESOLD_MAX = 100;

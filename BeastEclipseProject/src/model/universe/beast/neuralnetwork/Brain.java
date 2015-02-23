@@ -2,13 +2,10 @@ package model.universe.beast.neuralnetwork;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 
-import tools.LogUtil;
-import utils.MyRandom;
 import math.Angle;
-import model.universe.Universe;
+import math.MyRandom;
 import model.universe.beast.Beast;
 import model.universe.beast.Need;
 import model.universe.beast.neuralnetwork.action.Actuator;
@@ -35,11 +32,14 @@ public class Brain {
 	
 	public Brain(Beast beast){
 		this.beast = beast; 
-		addActuator(new Rotator(serial++, this, Angle.toRadians(10)));
-		addActuator(new Rotator(serial++, this, Angle.toRadians(-10)));
-		addActuator(new Rotator(serial++, this, Angle.toRadians(30)));
-		addActuator(new Rotator(serial++, this, Angle.toRadians(-30)));
-		addActuator(new Mover(serial++, this, 1));
+		addActuator(new Rotator(serial++, this));
+		addActuator(new Rotator(serial++, this));
+		addActuator(new Rotator(serial++, this));
+		addActuator(new Rotator(serial++, this));
+		addActuator(new Mover(serial++, this));
+		addActuator(new Mover(serial++, this));
+		addActuator(new Mover(serial++, this));
+		addActuator(new Mover(serial++, this));
 		addNeed(beast.need);
 		classifyNeurons();
 		createRandomConnexions();
@@ -121,7 +121,11 @@ public class Brain {
 	}
 	
 	private void mutateNeuron(){
-		all.get(MyRandom.nextInt(all.size())).setRandomThresold();
+		Neuron n = all.get(MyRandom.nextInt(all.size()));
+		if(n instanceof Actuator && MyRandom.next()<0.5)
+			((Actuator)n).setRandomPower();
+		else
+			n.setRandomThresold();
 	}
 	private void deleteNeuron(){
 		if(neurons.isEmpty()){
@@ -179,10 +183,14 @@ public class Brain {
 		}
 	}
 	
-	public Brain getMutation(Beast beast){
-		Brain res = new Brain(this, beast);
+	public Brain getMutation(Beast newBeast){
+		Brain res = new Brain(this, newBeast);
 		res.mutateRandomly();
 		classifyNeurons();
+		return res;
+	}
+	public Brain getIdentical(Beast newBeast){
+		Brain res = new Brain(this, newBeast);
 		return res;
 	}
 }

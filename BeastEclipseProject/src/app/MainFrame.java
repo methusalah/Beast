@@ -3,9 +3,9 @@ package app;
 
 import javax.swing.JFrame;
 
-import view.ViewPanel;
 import model.Model;
 import net.miginfocom.swing.MigLayout;
+import view.ViewPanel;
 
 public class MainFrame extends JFrame {
 

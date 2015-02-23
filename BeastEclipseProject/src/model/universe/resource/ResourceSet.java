@@ -3,7 +3,7 @@ package model.universe.resource;
 import java.util.ArrayList;
 import java.util.List;
 
-import utils.MyRandom;
+import math.MyRandom;
 
 public class ResourceSet implements ResourceIDManager {
 	public static final int NB_RESOURCE = 100; 
@@ -13,7 +13,7 @@ public class ResourceSet implements ResourceIDManager {
 	
 	public ResourceSet() {
 		for(int i = 0; i<NB_RESOURCE; i++)
-			resources.add(new Resource(this));
+			resources.add(new Resource(this, this));
 	}
 	
 	
@@ -44,5 +44,13 @@ public class ResourceSet implements ResourceIDManager {
 	
 	public Resource getRandomResource(){
 		return resources.get(MyRandom.between(0, resources.size()-1));
+	}
+	
+	public void deleteResource(Resource r){
+		resources.remove(r);
+	}
+	
+	public int getCount(){
+		return resources.size();
 	}
 }

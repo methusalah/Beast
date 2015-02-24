@@ -26,14 +26,6 @@ public abstract class Actuator extends Neuron {
 		power = MyRandom.next();
 	}
 	
-	@Override
-	protected void excite() {
-		if(!excitedThisTurn){
-			excitedThisTurn = true;
-			triggerAction();
-		}
-	}
-	
-	protected abstract void triggerAction();
+	public abstract void act();
 
 }

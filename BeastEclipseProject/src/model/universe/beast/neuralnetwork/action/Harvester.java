@@ -17,7 +17,7 @@ public class Harvester extends Actuator{
 	}
 
 	@Override
-	protected void triggerAction() {
+	public void act() {
 		brain.beast.harvest(resource, power);
 	}
 }

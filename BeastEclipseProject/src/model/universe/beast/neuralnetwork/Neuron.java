@@ -59,6 +59,10 @@ public class Neuron {
 		return res;
 	}
 	
+	public boolean excited(){
+		return excitedThisTurn;
+	}
+	
 	protected void calm(){
 		polarisation = 0;
 		excitedThisTurn = false;

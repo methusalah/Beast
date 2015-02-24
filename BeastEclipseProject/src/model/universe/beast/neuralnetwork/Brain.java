@@ -47,7 +47,9 @@ public class Brain {
 
 	private void addNeed(Need need){
 		addSensor(new NeedSensor(serial++, this));
-		addSensor(new ResourceSensor(serial++, this, need.resource));
+		addSensor(new ResourceSensor(serial++, this, need.resource, 0, 0));
+		addSensor(new ResourceSensor(serial++, this, need.resource, 2, Angle.toRadians(10)));
+		addSensor(new ResourceSensor(serial++, this, need.resource, 2, Angle.toRadians(-10)));
 		addActuator(new Harvester(serial++, this, need.resource));
 	}
 	
@@ -95,10 +97,11 @@ public class Brain {
 	public void stimulate(){
 		for(Sensor s : sensors)
 			s.stimulate();
-		List<Neuron> all = new ArrayList<>();
-		all.addAll(sensors);
-		all.addAll(neurons);
-		all.addAll(actuators);
+		
+		for(Actuator a : actuators)
+			if(a.excited())
+				a.act();
+		
 		for(Neuron n : all)
 			n.calm();
 	}
@@ -192,5 +195,9 @@ public class Brain {
 	public Brain getIdentical(Beast newBeast){
 		Brain res = new Brain(this, newBeast);
 		return res;
+	}
+	
+	public int getSize(){
+		return neurons.size();
 	}
 }

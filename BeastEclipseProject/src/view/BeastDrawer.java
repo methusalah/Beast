@@ -31,7 +31,6 @@ public class BeastDrawer {
 	}
 	
 	public void draw(Graphics2D g, int height){
-		
 		naturalBeatsCount = 0;
 		maxAge = 0;
 		maxGen = 0;
@@ -42,16 +41,13 @@ public class BeastDrawer {
 		
 		for(Beast b : model.universe.beasts){
 			g.setColor(b.getColor());
-			int size = Math.min(10, Math.max(1, (int)((double)b.gen/10)));
-			
-			if(b.coord.equals(b.trail) ||
-					b.coord.getDistance(b.trail) > 10)
-				g.fillRect((int)(b.coord.x*ViewPanel.SCALE)+2-size/2, (int)(b.coord.y*ViewPanel.SCALE)+2-size/2, size, size);
-						
-			else{
-				g.setStroke(new BasicStroke(size));
-				g.drawLine((int)(b.coord.x*ViewPanel.SCALE)+2, (int)(b.coord.y*ViewPanel.SCALE)+2,
-						(int)(b.trail.x*ViewPanel.SCALE)+2, (int)(b.trail.y*ViewPanel.SCALE)+2);
+			int size = Math.min(4, (int)((double)b.gen/10));
+
+			g.fillOval((int)(b.coord.x*ViewPanel.SCALE)-size, (int)(b.coord.y*ViewPanel.SCALE)-size, 1+size*2, 1+size*2);
+			if(!b.coord.equals(b.trail) && b.coord.getDistance(b.trail) < 10){
+				g.setStroke(new BasicStroke(Math.min(4, size)));
+				g.drawLine((int)(b.coord.x*ViewPanel.SCALE), (int)(b.coord.y*ViewPanel.SCALE),
+						(int)(b.trail.x*ViewPanel.SCALE), (int)(b.trail.y*ViewPanel.SCALE));
 				g.setStroke(new BasicStroke(1));
 			}
 			if(b.gen>0)

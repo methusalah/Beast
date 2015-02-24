@@ -21,7 +21,7 @@ import model.universe.resource.ResourceSpot;
 import utils.StopWatch;
 
 public class ViewPanel extends JPanel {
-	static int SCALE = 8;
+	static int SCALE = 7;
 
 	ResourceDrawer resourceDrawer;
 	BeastDrawer beastDrawer;

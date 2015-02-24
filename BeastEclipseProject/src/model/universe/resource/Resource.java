@@ -13,7 +13,7 @@ public class Resource {
 	private static double Q_GROWTH_MAX = +50;
 	private static double Q_HARVEST_MAX = 100;
 	private static double CAN_EXPAND_PROB = 0.1;
-	private static double EXPAND_PROB_MAX = 0.5;
+	private static double EXPAND_PROB_MAX = 0.1;
 	private static double SPONTANEOUS_PROB = 0.5;
 	private static double SPONTANEOUS_ON_CORPSE_PROB = 0.1;
 	
@@ -66,7 +66,7 @@ public class Resource {
 		this.qHarvest = qHarvest;
 		this.canExpand = canExpand;
 		
-		expandProb = 0.1;//MyRandom.between(0.1, EXPAND_PROB_MAX);
+		expandProb = EXPAND_PROB_MAX;
 		spontaneous = MyRandom.next()<SPONTANEOUS_PROB;
 
 		this.spontaneousOnCorpse = spontaneousOnCorpse;

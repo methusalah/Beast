@@ -52,6 +52,8 @@ public class Beast extends UComp {
 		move(MyRandom.between(1d, 2d));
 		trail = coord;
 		setNextReproduction();
+		double needPerTurn = Math.max(1, brain.getSize());
+		need.change(100*needPerTurn, needPerTurn);
 	}
 	
 
@@ -60,6 +62,7 @@ public class Beast extends UComp {
 		trail = coord;
 		brain.stimulate();
 		need.deplete();
+		
 		if(need.getDepletionRate() <= 0 ||
 				age > 5000)
 			die();

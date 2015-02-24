@@ -25,30 +25,30 @@ public class ResourceSet implements ResourceIDManager {
 					40,
 					true,
 					false));
-//			resources.add(new Resource(this, this,
-//					new Color(50, 150, 80),
-//					1000,
-//					100,
-//					50,
-//					10,
-//					true,
-//					false));
-//			resources.add(new Resource(this, this,
-//					new Color(50, 200, 200),
-//					1000,
-//					500,
-//					200,
-//					1,
-//					true,
-//					false));
 			resources.add(new Resource(this, this,
-					new Color(250, 150, 150),
-					2000,
-					2000,
-					-100,
+					new Color(50, 150, 80),
+					1000,
+					100,
 					50,
-					false,
-					true));
+					10,
+					true,
+					false));
+			resources.add(new Resource(this, this,
+					new Color(50, 200, 200),
+					1000,
+					500,
+					200,
+					1,
+					true,
+					false));
+//			resources.add(new Resource(this, this,
+//					new Color(250, 150, 150),
+//					2000,
+//					2000,
+//					-100,
+//					50,
+//					false,
+//					true));
 		}
 	}
 	

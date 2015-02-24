@@ -11,8 +11,8 @@ public class Need {
 	private static final double DEPLETION_MAX = 10;
 
 	public final Resource resource;
-	final double capacity;
-	final double depletion;
+	double capacity;
+	double depletion;
 	
 	double level;
 	
@@ -62,5 +62,11 @@ public class Need {
 		res = res.concat("    Depletion : "+ds.format(depletion)+ls);
 		res = res.concat(resource.toString());
 		return res;
+	}
+	
+	public void change(double capacity, double depletion){
+		this.capacity = capacity;
+		level = capacity;
+		this.depletion = depletion;
 	}
 }

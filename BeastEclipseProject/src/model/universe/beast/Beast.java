@@ -92,7 +92,7 @@ public class Beast extends UComp {
 
 	public void move(double power){
 		Point2D newCoord = universe.getInBounds(coord.getTranslation(orientation, maxSpeed*power));
-		need.deplete(power);
+		need.deplete(5*power);
 		
 		Tile previous = universe.getTile(coord); 
 		Tile newTile = universe.getTile(newCoord);

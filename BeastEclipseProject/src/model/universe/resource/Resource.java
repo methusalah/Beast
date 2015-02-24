@@ -66,7 +66,7 @@ public class Resource {
 		this.qHarvest = qHarvest;
 		this.canExpand = canExpand;
 		
-		expandProb = MyRandom.between(0, EXPAND_PROB_MAX);
+		expandProb = 0.1;//MyRandom.between(0.1, EXPAND_PROB_MAX);
 		spontaneous = MyRandom.next()<SPONTANEOUS_PROB;
 
 		this.spontaneousOnCorpse = spontaneousOnCorpse;

@@ -23,7 +23,7 @@ public class Need {
 			depletion = MyRandom.between(1, DEPLETION_MAX);
 		} else {
 			capacity = 100;
-			depletion = 2;
+			depletion = 1;
 		}
 			
 		level = capacity;

@@ -14,7 +14,7 @@ public class Neuron {
 	final List<Axon> axons = new ArrayList<>();
 	final List<Neuron> preSynaptics = new ArrayList<>();
 	final public int serial;
-	double thresold;
+	public double thresold;
 	
 	double polarisation = Double.NaN;
 	

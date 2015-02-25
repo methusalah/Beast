@@ -15,8 +15,9 @@ import model.universe.resource.ResourceSpot;
 
 public class Beast extends UComp {
 
-	private final Brain brain;
+	public final Brain brain;
 	public final Need need;
+	public final Color color;
 	
 	private double orientation;
 	private double maxSpeed = 2;
@@ -35,6 +36,7 @@ public class Beast extends UComp {
 		orientation = MyRandom.between(-Angle.FLAT, Angle.FLAT);
 		trail = coord;
 		setNextReproduction();
+		color = new Color(MyRandom.nextInt(255), MyRandom.nextInt(255), MyRandom.nextInt(255));
 	}
 	
 	public Beast(Beast parent, boolean mutate){
@@ -43,16 +45,21 @@ public class Beast extends UComp {
 		if(mutate){
 			brain = parent.brain.getMutation(this);
 			gen = parent.gen+1;
+			int r = Math.min(255, Math.max(0, parent.color.getRed()+MyRandom.between(-1, 2)));
+			int g = Math.min(255, Math.max(0, parent.color.getGreen()+MyRandom.between(-1, 2)));
+			int b = Math.min(255, Math.max(0, parent.color.getBlue()+MyRandom.between(-1, 2)));
+			color = new Color(r, g, b);
 		} else {
 			brain = parent.brain.getIdentical(this);
 			gen = parent.gen;
 			dinoGen = parent.dinoGen+1;
+			color = parent.color;
 		}
 		orientation = MyRandom.between(-Angle.FLAT, Angle.FLAT);
 		move(MyRandom.between(1d, 2d));
 		trail = coord;
 		setNextReproduction();
-		double needPerTurn = Math.max(1, brain.getSize());
+		double needPerTurn = Math.max(1, brain.neurons.size());
 		need.change(100*needPerTurn, needPerTurn);
 	}
 	
@@ -109,13 +116,12 @@ public class Beast extends UComp {
 
 	@Override
 	public Color getColor() {
-		int red = (int)(255*need.getDepletionRate());
-		return new Color(red, 0, 0);
+		return color;
 	}
 
 	@Override
 	public int getSize() {
-		return 3;
+		return brain.getSize();
 	}
 	
 	private void creatChild(){
@@ -127,5 +133,10 @@ public class Beast extends UComp {
 	
 	private void setNextReproduction(){
 		nextReproduction += MyRandom.between(900, 1000);
+	}
+	
+	@Override
+	public String toString() {
+		return super.toString();
 	}
 }

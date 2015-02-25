@@ -1,11 +1,10 @@
 package model.universe.beast.neuralnetwork;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import tools.LogUtil;
-import math.Angle;
 import math.MyRandom;
 import model.universe.beast.Beast;
 import model.universe.beast.Need;
@@ -20,9 +19,9 @@ import model.universe.beast.neuralnetwork.perception.Sensor;
 public class Brain {
 
 	public final Beast beast;
-	final List<Sensor> sensors = new ArrayList<>();
-	final List<Neuron> neurons = new ArrayList<>();
-	final List<Actuator> actuators = new ArrayList<>();
+	public final List<Sensor> sensors = new ArrayList<>();
+	public final List<Neuron> neurons = new ArrayList<>();
+	public final List<Actuator> actuators = new ArrayList<>();
 	
 	List<Neuron> preSynaptics = new ArrayList<>();
 	List<Neuron> postSynaptics = new ArrayList<>();
@@ -35,12 +34,6 @@ public class Brain {
 	public Brain(Beast beast){
 		this.beast = beast; 
 		addActuator(new Rotator(serial++, this));
-		addActuator(new Rotator(serial++, this));
-		addActuator(new Rotator(serial++, this));
-		addActuator(new Rotator(serial++, this));
-		addActuator(new Mover(serial++, this));
-		addActuator(new Mover(serial++, this));
-		addActuator(new Mover(serial++, this));
 		addActuator(new Mover(serial++, this));
 		addNeed(beast.need);
 		classifyNeurons();
@@ -49,9 +42,7 @@ public class Brain {
 
 	private void addNeed(Need need){
 		addSensor(new NeedSensor(serial++, this));
-		addSensor(new ResourceSensor(serial++, this, need.resource, 0, 0));
-		addSensor(new ResourceSensor(serial++, this, need.resource, 2, Angle.toRadians(10)));
-		addSensor(new ResourceSensor(serial++, this, need.resource, 2, Angle.toRadians(-10)));
+		addSensor(new ResourceSensor(serial++, this, need.resource));
 		addActuator(new Harvester(serial++, this, need.resource));
 	}
 	
@@ -130,30 +121,47 @@ public class Brain {
 	
 	private void mutateNeuron(){
 		Neuron n = all.get(MyRandom.nextInt(all.size()));
-		if(n instanceof Actuator && MyRandom.next()<0.5)
+		if(n instanceof Actuator)
 			((Actuator)n).setRandomPower();
 		else
 			n.setRandomThresold();
 	}
 	private void deleteNeuron(){
-		if(neurons.isEmpty()){
-			mutateRandomly();
-			return;
-		}
-		int i = MyRandom.nextInt(neurons.size());
-		Neuron n = neurons.get(i);
-		neurons.remove(i);
+		int i = MyRandom.nextInt(all.size());
+		Neuron n = all.get(i);
+		if(n instanceof Sensor)
+			sensors.remove(n);
+		else if(n instanceof Actuator)
+			actuators.remove(n);
+		else
+			neurons.remove(n);
 		for(Neuron pre : n.preSynaptics)
 			pre.retireAxonOn(n);
 	}
 	private void addNeuron(){
-		Neuron n = new Neuron(serial++, this);
-		neurons.add(n);
-		preSynaptics.get(MyRandom.nextInt(preSynaptics.size())).launchAxonOn(n);
-		int axonCount = MyRandom.between(1, 2);
-		for(int i=0; i<axonCount; i++){
-			int index = MyRandom.nextInt(postSynaptics.size());
-			n.launchAxonOn(postSynaptics.get(index));
+		Neuron added;
+		switch (MyRandom.between(0, 3)){
+		case 0:
+			added = getRandomSensor();
+			sensors.add((Sensor)added);
+			break;
+		case 1:
+			added = getRandomActuator();
+			actuators.add((Actuator)added);
+			break;
+		case 2:
+			added = new Neuron(serial++, this);
+			neurons.add(added);
+			break;
+		default : throw new RuntimeException();
+		}
+		preSynaptics.get(MyRandom.nextInt(preSynaptics.size())).launchAxonOn(added);
+		if(!(added instanceof Actuator)){
+			int axonCount = MyRandom.between(1, 2);
+			for(int i=0; i<axonCount; i++){
+				int index = MyRandom.nextInt(postSynaptics.size());
+				added.launchAxonOn(postSynaptics.get(index));
+			}
 		}
 	}
 	private void mutateAxon(){
@@ -191,10 +199,26 @@ public class Brain {
 		}
 	}
 	
+	public Sensor getRandomSensor(){
+		switch (MyRandom.between(0, 2)){
+		case 0: return new NeedSensor(serial++, this);
+		case 1: return new ResourceSensor(serial++, this, beast.need.resource);
+		default : throw new RuntimeException();
+		}
+	}
+	public Actuator getRandomActuator(){
+		switch (MyRandom.between(0, 3)){
+		case 0: return new Harvester(serial++, this, beast.need.resource);
+		case 1: return new Mover(serial++, this);
+		case 2: return new Rotator(serial++, this);
+		default : throw new RuntimeException();
+		}
+	}
+	
 	public Brain getMutation(Beast newBeast){
 		Brain res = new Brain(this, newBeast);
 		res.mutateRandomly();
-		classifyNeurons();
+		res.classifyNeurons();
 		return res;
 	}
 	public Brain getIdentical(Beast newBeast){
@@ -203,6 +227,22 @@ public class Brain {
 	}
 	
 	public int getSize(){
-		return neurons.size();
+		return all.size();
+	}
+	
+	@Override
+	public String toString() {
+		String ls = System.lineSeparator();
+		DecimalFormat df = new DecimalFormat("0");
+		String res = this.getClass().getSimpleName()+" Decription :"+ls;
+		res = res.concat("Sensors        Neurons        Actuators"+ls);
+		for(Sensor s : sensors)
+			res = res.concat(""+s.getClass().getSimpleName()+"("+df.format(s.thresold)+")"+ls);
+		for(Neuron n : neurons)
+			res = res.concat("               "+n.getClass().getSimpleName()+"("+df.format(n.thresold)+")"+ls);
+		for(Actuator a : actuators)
+			res = res.concat("                              "+a.getClass().getSimpleName()+"("+df.format(a.thresold)+")"+ls);
+			
+		return res ;
 	}
 }

@@ -17,7 +17,7 @@ public class BeastDrawer {
 	int naturalBeatsCount;
 	int maxAge;
 	int maxGen;
-	Beast dino;
+	public Beast dino;
 	
 	ArrayList<Integer> agesTable = new ArrayList<>(); 
 	ArrayList<Integer> genTable = new ArrayList<>(); 
@@ -42,6 +42,7 @@ public class BeastDrawer {
 		for(Beast b : model.universe.beasts){
 			g.setColor(b.getColor());
 			int size = Math.min(4, (int)(Math.ceil((double)b.gen/10)));
+//			int size = Math.min(4, (int)((double)b.getSize()/5));
 
 			if(size == 0)
 				g.drawLine((int)(b.coord.x*ViewPanel.SCALE), (int)(b.coord.y*ViewPanel.SCALE),
@@ -62,8 +63,8 @@ public class BeastDrawer {
 				genTable.set(b.gen, genTable.get(b.gen)+1);
 			int scaledAge = (int)Math.floor((double)b.age/10); 
 			agesTable.set(scaledAge, genTable.get(scaledAge)+1);
-			if(dino == null || b.dinoGen > dino.dinoGen)
-				dino = b;
+//			if(dino == null || b.dinoGen > dino.dinoGen)
+//				dino = b;
 			
 		}
 
@@ -82,10 +83,11 @@ public class BeastDrawer {
 			x+=2;
 			i++;
 		}
-		
-		g.setColor(dino.need.resource.color);
-		g.setFont(new Font("Arial",Font.BOLD,15));
-		drawString(g, ""+dino.need, 400,  height-ceil+24);
+		if(dino != null) {
+			g.setColor(dino.need.resource.color);
+			g.setFont(new Font("Arial",Font.BOLD,15));
+			drawString(g, ""+dino.need, 400,  height-ceil+24);
+		}
 	}
 	
 	void drawString(Graphics2D g, String text, int x, int y) {

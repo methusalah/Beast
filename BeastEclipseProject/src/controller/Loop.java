@@ -1,12 +1,20 @@
 package controller;
 
+import geometry.Point2D;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import model.Model;
+import model.universe.Tile;
+import model.universe.UComp;
+import model.universe.beast.Beast;
+import tools.LogUtil;
 import view.ViewPanel;
 
-public class Loop implements KeyListener {
+public class Loop implements KeyListener, MouseListener{
 	private static final double DEFAULT_FPS = 25;
 
 	private Model model;
@@ -68,5 +76,75 @@ public class Loop implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		LogUtil.logger.info("clicked");
+		Point2D coordInModel = new Point2D(e.getX()/view.SCALE, e.getY()/view.SCALE);
+		Tile t = model.universe.getTile(model.universe.getInBounds(coordInModel));
+		for(UComp c : t.comps)
+			if(c instanceof Beast){
+				Beast b = (Beast)c;
+				view.beastDrawer.dino = b;
+				LogUtil.logger.info(""+b.brain);
+				return;
+			}
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
 	}	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,21 +1,25 @@
 package model.universe.beast.neuralnetwork.perception;
 
 import geometry.Point2D;
+import math.Angle;
+import math.MyRandom;
 import model.universe.beast.neuralnetwork.Brain;
 import model.universe.resource.Resource;
 import model.universe.resource.ResourceSpot;
 
 public class ResourceSensor extends ExternalSensor {
+	private static final double MAX_ANGLE = Angle.RIGHT;
+	private static final double MAX_VIEW_DISTANCE = 5;
 
 	final Resource resource;
 	final double distance;
 	final double angle;
 
-	public ResourceSensor(int serial, Brain brain, Resource resource, double distance, double angle) {
+	public ResourceSensor(int serial, Brain brain, Resource resource) {
 		super(serial, brain);
 		this.resource = resource;
-		this.angle = angle;
-		this.distance = distance;
+		this.angle = MyRandom.between(-MAX_ANGLE, MAX_ANGLE);
+		this.distance = MyRandom.between(0, MAX_VIEW_DISTANCE);
 	}
 	public ResourceSensor(ResourceSensor other, Brain newBrain) {
 		super(other, newBrain);

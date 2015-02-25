@@ -58,7 +58,7 @@ public class Universe {
 		
 		int newBeastToCreate = 10;
 		if(beasts.size() < width*height*BEAST_RATE)
-			newBeastToCreate = (int)(width*height*BEAST_RATE);
+			newBeastToCreate = (int)(width*height*BEAST_RATE)-beasts.size();
 		for(int i=0; i<newBeastToCreate; i++)
 			new Beast(this, new Point2D(MyRandom.next()*(width-1), MyRandom.next()*(height-1)));
 	}

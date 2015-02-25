@@ -21,10 +21,10 @@ import model.universe.resource.ResourceSpot;
 import utils.StopWatch;
 
 public class ViewPanel extends JPanel {
-	static int SCALE = 7;
+	public static int SCALE = 7;
 
 	ResourceDrawer resourceDrawer;
-	BeastDrawer beastDrawer;
+	public BeastDrawer beastDrawer;
 	private Model model;
 	StopWatch chrono;
 	Long timer = (long) 0.0;

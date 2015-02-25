@@ -19,28 +19,28 @@ public class ResourceSet implements ResourceIDManager {
 		else {
 			resources.add(new Resource(this, this,
 					new Color(100, 250, 100),
-					2000,
+					500,
 					1,
-					200,
+					50,
 					40,
 					true,
 					false));
 			resources.add(new Resource(this, this,
 					new Color(50, 150, 80),
-					1000,
-					100,
+					500,
+					1,
 					50,
 					10,
 					true,
 					false));
-			resources.add(new Resource(this, this,
-					new Color(50, 200, 200),
-					1000,
-					500,
-					200,
-					1,
-					true,
-					false));
+//			resources.add(new Resource(this, this,
+//					new Color(20, 200, 200),
+//					1000,
+//					500,
+//					80,
+//					1,
+//					true,
+//					false));
 //			resources.add(new Resource(this, this,
 //					new Color(250, 150, 150),
 //					2000,
@@ -79,7 +79,8 @@ public class ResourceSet implements ResourceIDManager {
 	}
 	
 	public Resource getRandomResource(){
-		return resources.get(MyRandom.between(0, resources.size()-1));
+		
+		return resources.get(MyRandom.between(0, resources.size()));
 	}
 	
 	public void deleteResource(Resource r){

@@ -1,7 +1,6 @@
 package app;
 
 
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,9 +13,13 @@ import controller.Loop;
 public class BeastMain {
 	public static void main(String[] args) throws Exception {
 
+		
+		
+		
 		Logger.getLogger("").setLevel(Level.INFO);
 		LogUtil.init();
 		int seed = (int)(Math.random()*10000000);
+//		4701876
 		MyRandom.changeSeed(seed);
 		LogUtil.logger.info("Seed : "+seed);
 		
@@ -27,6 +30,7 @@ public class BeastMain {
 		
 		Loop l = new Loop(model, view);
 		frame.addKeyListener(l);
+		frame.addMouseListener(l);
 		l.start();
 		
 	}

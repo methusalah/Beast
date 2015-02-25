@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import tools.LogUtil;
 import math.Angle;
 import math.MyRandom;
 import model.universe.beast.Beast;
@@ -27,6 +28,7 @@ public class Brain {
 	List<Neuron> postSynaptics = new ArrayList<>();
 	List<Neuron> all = new ArrayList<>();
 	
+	public List<Neuron> polarized = new ArrayList<>();
 	int serial=0;
 	
 	
@@ -97,10 +99,13 @@ public class Brain {
 	public void stimulate(){
 		for(Sensor s : sensors)
 			s.stimulate();
-		
-		for(Actuator a : actuators)
-			if(a.excited())
-				a.act();
+		while (!polarized.isEmpty()) {
+			List<Neuron> polarizedThisTurn = new ArrayList<>();
+			polarizedThisTurn.addAll(polarized);
+			polarized.clear();
+			for(Neuron n : polarizedThisTurn)
+				n.finalizePolarisation();
+		}
 		
 		for(Neuron n : all)
 			n.calm();
@@ -142,7 +147,7 @@ public class Brain {
 			pre.retireAxonOn(n);
 	}
 	private void addNeuron(){
-		Neuron n = new Neuron(serial++);
+		Neuron n = new Neuron(serial++, this);
 		neurons.add(n);
 		preSynaptics.get(MyRandom.nextInt(preSynaptics.size())).launchAxonOn(n);
 		int axonCount = MyRandom.between(1, 2);

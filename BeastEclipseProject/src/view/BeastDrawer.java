@@ -41,9 +41,13 @@ public class BeastDrawer {
 		
 		for(Beast b : model.universe.beasts){
 			g.setColor(b.getColor());
-			int size = Math.min(4, (int)((double)b.gen/10));
+			int size = Math.min(4, (int)(Math.ceil((double)b.gen/10)));
 
-			g.fillOval((int)(b.coord.x*ViewPanel.SCALE)-size, (int)(b.coord.y*ViewPanel.SCALE)-size, 1+size*2, 1+size*2);
+			if(size == 0)
+				g.drawLine((int)(b.coord.x*ViewPanel.SCALE), (int)(b.coord.y*ViewPanel.SCALE),
+						(int)(b.coord.x*ViewPanel.SCALE), (int)(b.coord.y*ViewPanel.SCALE));
+			else
+				g.fillOval((int)(b.coord.x*ViewPanel.SCALE)-size, (int)(b.coord.y*ViewPanel.SCALE)-size, 1+size*2, 1+size*2);
 			if(!b.coord.equals(b.trail) && b.coord.getDistance(b.trail) < 10){
 				g.setStroke(new BasicStroke(Math.min(4, size)));
 				g.drawLine((int)(b.coord.x*ViewPanel.SCALE), (int)(b.coord.y*ViewPanel.SCALE),

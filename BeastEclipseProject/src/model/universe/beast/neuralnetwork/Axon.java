@@ -32,7 +32,10 @@ public class Axon {
 	}
 	
 	public void setRandomPolarisationValue(){
-		polarizationValue = MyRandom.between(POLARIZATION_MIN, POLARIZATION_MAX);
+		polarizationValue = getRandomPolarisationValue();
+	}
+	public static double getRandomPolarisationValue(){
+		return MyRandom.between(POLARIZATION_MIN, POLARIZATION_MAX);
 	}
 
 }

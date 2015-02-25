@@ -3,37 +3,41 @@ package model.universe.beast.neuralnetwork;
 import java.util.ArrayList;
 import java.util.List;
 
+import tools.LogUtil;
 import math.MyRandom;
 
 public class Neuron {
 	protected static final double THRESOLD_MAX = 100;
 	
 
+	protected final Brain brain;
 	final List<Axon> axons = new ArrayList<>();
 	final List<Neuron> preSynaptics = new ArrayList<>();
 	final public int serial;
 	double thresold;
 	
-	protected boolean excitedThisTurn = false;
-	double polarisation = 0;
+	double polarisation = Double.NaN;
 	
-	public Neuron(int serial) {
+	public Neuron(int serial, Brain brain) {
 		this.serial = serial;
+		this.brain = brain;
 		setRandomThresold();
 	}
 
-	public Neuron(Neuron other) {
+	public Neuron(Neuron other, Brain newBrain) {
 		this.serial = other.serial;
+		this.brain = newBrain;
 		thresold = other.thresold;
 		for(Axon a : other.axons)
 			axons.add(new Axon(a));
 	}
 	
 	public void polarize(double value){
-		polarisation += value;
-		if(polarisation > thresold){
-			excite();
+		if(Double.isNaN(polarisation)){
+			brain.polarized.add(this);
+			polarisation = 0;
 		}
+		polarisation += value;
 	}
 	
 	public void launchAxonOn(Neuron other){
@@ -59,21 +63,18 @@ public class Neuron {
 		return res;
 	}
 	
-	public boolean excited(){
-		return excitedThisTurn;
-	}
-	
 	protected void calm(){
-		polarisation = 0;
-		excitedThisTurn = false;
+		polarisation = Double.NaN;
 	}
 	
-	protected void excite(){
-		if(!excitedThisTurn){
-			excitedThisTurn = true;
-			for(Axon a : axons)
-				a.activate();
-		}
+	protected void finalizePolarisation(){
+		if(polarisation > thresold)
+			excite();
+	}
+	
+	public void excite(){
+		for(Axon a : axons)
+			a.activate();
 	}
 	
 	public void setRandomThresold(){

@@ -25,14 +25,14 @@ public class ResourceSensor extends ExternalSensor {
 	}
 
 	@Override
-	public void stimulate() {
-		Point2D p = brain.beast.universe.getInBounds(brain.beast.coord.getTranslation(angle, distance));
+	public double getStimulationRate() {
+		Point2D p = Point2D.ORIGIN;
+		if(distance > 0)
+			p = brain.beast.universe.getInBounds(brain.beast.coord.getTranslation(angle, distance));
 		ResourceSpot spot = brain.beast.universe.getResourceSpot(resource, p);
 		if(spot == null)
-			return;
-		polarize(spot.getRate()*THRESOLD_MAX);
+			return 0;
+		else
+			return spot.getRate();
 	}
-	
-	
-
 }

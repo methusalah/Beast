@@ -14,7 +14,7 @@ public class Rotator extends Actuator {
 	}
 
 	@Override
-	public void act() {
+	public void excite() {
 		brain.beast.rotate(power);
 	}
 }

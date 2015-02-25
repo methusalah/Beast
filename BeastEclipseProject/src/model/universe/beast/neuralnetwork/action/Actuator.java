@@ -8,17 +8,12 @@ public abstract class Actuator extends Neuron {
 	
 	double power;
 	
-	
-	final Brain brain; 
-	
 	public Actuator(int serial, Brain brain) {
-		super(serial);
-		this.brain = brain;
+		super(serial, brain);
 		setRandomPower();
 	}
 	public Actuator(Actuator other, Brain newBrain) {
-		super(other);
-		this.brain = newBrain;
+		super(other, newBrain);
 		this.power = other.power;
 	}
 	
@@ -26,6 +21,6 @@ public abstract class Actuator extends Neuron {
 		power = MyRandom.next();
 	}
 	
-	public abstract void act();
-
+	@Override
+	public abstract void excite();
 }

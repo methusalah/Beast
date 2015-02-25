@@ -11,7 +11,7 @@ public class NeuronFactory {
 	public static Neuron getCopy(Neuron other, Brain newBrain){
 		Class<? extends Neuron> c = other.getClass();
 		if(c == Neuron.class)
-			return new Neuron(other);
+			return new Neuron(other, newBrain);
 		else if(c == NeedSensor.class)
 			return new NeedSensor((NeedSensor)other, newBrain);
 		else if(c == ResourceSensor.class)

@@ -12,8 +12,7 @@ public class NeedSensor extends Sensor {
 	}
 
 	@Override
-	public void stimulate() {
-		polarize(brain.beast.need.getDepletionRate()*THRESOLD_MAX);
+	public double getStimulationRate() {
+		return brain.beast.need.getDepletionRate();
 	}
-
 }

@@ -1,21 +1,27 @@
 package model.universe.beast.neuralnetwork.perception;
 
+import tools.LogUtil;
+import model.universe.beast.neuralnetwork.Axon;
 import model.universe.beast.neuralnetwork.Brain;
 import model.universe.beast.neuralnetwork.Neuron;
 
 public abstract class Sensor extends Neuron{
 	
-	final Brain brain;
+	final double polarisationValue;
 	
-	public Sensor(int serial, Brain newBrain) {
-		super(serial);
-		this.brain = newBrain;
+	public Sensor(int serial, Brain brain) {
+		super(serial, brain);
+		polarisationValue = Axon.getRandomPolarisationValue();
 	}
 	
 	public Sensor(Sensor other, Brain newBrain){
-		super(other);
-		this.brain = newBrain;
+		super(other, newBrain);
+		polarisationValue = other.polarisationValue;
 	}
 
-	public abstract void stimulate();
+	public abstract double getStimulationRate();
+	
+	public void stimulate(){
+		polarize(getStimulationRate()*polarisationValue);
+	}
 }

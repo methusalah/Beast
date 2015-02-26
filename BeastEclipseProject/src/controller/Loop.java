@@ -80,16 +80,15 @@ public class Loop implements KeyListener, MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		LogUtil.logger.info("clicked");
 		Point2D coordInModel = new Point2D(e.getX()/view.SCALE, e.getY()/view.SCALE);
-		Tile t = model.universe.getTile(model.universe.getInBounds(coordInModel));
-		for(UComp c : t.comps)
-			if(c instanceof Beast){
-				Beast b = (Beast)c;
-				view.beastDrawer.dino = b;
-				LogUtil.logger.info(""+b.brain);
-				return;
-			}
+		Beast closest = null;
+		synchronized (model) {
+			for(Beast b : model.universe.beasts)
+				if(b.gen > 0 && 
+						(closest == null || b.coord.getDistance(coordInModel) < closest.coord.getDistance(coordInModel)))
+					closest = b;
+		}
+		LogUtil.logger.info(""+closest.brain);
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import model.universe.Tile;
 import model.universe.UComp;
 import model.universe.Universe;
 import model.universe.beast.neuralnetwork.Brain;
+import model.universe.beast.neuralnetwork.BrainFactory;
 import model.universe.resource.Resource;
 import model.universe.resource.ResourceSpot;
 
@@ -32,7 +33,8 @@ public class Beast extends UComp {
 	public Beast(Universe universe, Point2D coord) {
 		super(universe, coord);
 		need = new Need(universe.resourceSet.getRandomResource(), false);
-		brain = new Brain(this);
+		BrainFactory brainFactory = new BrainFactory(this);
+		brain = brainFactory.getBrain();
 		orientation = MyRandom.between(-Angle.FLAT, Angle.FLAT);
 		trail = coord;
 		setNextReproduction();
@@ -42,15 +44,15 @@ public class Beast extends UComp {
 	public Beast(Beast parent, boolean mutate){
 		super(parent.universe, parent.coord);
 		need = new Need(parent.need);
+		BrainFactory brainFactory = new BrainFactory(this, parent.brain, mutate);
+		brain = brainFactory.getBrain();
 		if(mutate){
-			brain = parent.brain.getMutation(this);
 			gen = parent.gen+1;
 			int r = Math.min(255, Math.max(0, parent.color.getRed()+MyRandom.between(-1, 2)));
 			int g = Math.min(255, Math.max(0, parent.color.getGreen()+MyRandom.between(-1, 2)));
 			int b = Math.min(255, Math.max(0, parent.color.getBlue()+MyRandom.between(-1, 2)));
 			color = new Color(r, g, b);
 		} else {
-			brain = parent.brain.getIdentical(this);
 			gen = parent.gen;
 			dinoGen = parent.dinoGen+1;
 			color = parent.color;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import math.MyRandom;
+import model.universe.beast.Beast;
 import model.universe.resource.Resource;
 import model.universe.resource.ResourceSpot;
 
@@ -11,7 +12,8 @@ public class Tile {
 
 	public final int x, y;
 	final Universe universe;
-	public final List<UComp> comps = new ArrayList<>();
+	final List<ResourceSpot> spots = new ArrayList<>();
+	final List<Beast> beasts = new ArrayList<>();
 	
 	public Tile(int x, int y, Universe universe) {
 		this.x = x;
@@ -20,13 +22,35 @@ public class Tile {
 	}
 	
 	public void register(UComp comp){
-		if(!comps.contains(comp))
-			comps.add(comp);
+		if(comp instanceof Beast)
+			register((Beast)comp);
+		else
+			register((ResourceSpot)comp);
+	}
+	public void unregister(UComp comp){
+		if(comp instanceof Beast)
+			unregister((Beast)comp);
+		else
+			unregister((ResourceSpot)comp);
+	}
+			
+	public void register(Beast beast){
+		if(!beasts.contains(beast))
+			beasts.add(beast);
 	}
 
-	public void unregister(UComp comp){
-		if(!comps.remove(comp))
-			throw new RuntimeException("comp introuvable dans ce tile"+comp);
+	public void register(ResourceSpot spot){
+		if(!spots.contains(spot))
+			spots.add(spot);
+	}
+
+	public void unregister(Beast beast){
+		if(!beasts.remove(beast))
+			throw new RuntimeException("beast doesn't exist in the "+this.getClass().getSimpleName()+" ("+beast+")");
+	}
+	public void unregister(ResourceSpot spot){
+		if(!spots.remove(spot))
+			throw new RuntimeException("beast doesn't exist in the "+this.getClass().getSimpleName()+" ("+spot+")");
 	}
 	
 	public Tile getNorth(){
@@ -60,16 +84,22 @@ public class Tile {
 	}
 	
 	public boolean contains(Resource r){
-		for(UComp c : comps)
-			if(c instanceof ResourceSpot && ((ResourceSpot)c).resource == r)
+		for(ResourceSpot s : spots)
+			if(s.resource == r)
 				return true;
 		return false;
 	}
 	public ResourceSpot getResourceSpot(Resource r){
-		for(UComp c : comps)
-			if(c instanceof ResourceSpot && ((ResourceSpot)c).resource == r)
-				return (ResourceSpot)c;
+		for(ResourceSpot s : spots)
+			if(s.resource == r)
+				return s;
 		return null;
+	}
+	public List<ResourceSpot> getSpots(){
+		return spots;
+	}
+	public List<Beast> getBeasts(){
+		return beasts;
 	}
 
 }

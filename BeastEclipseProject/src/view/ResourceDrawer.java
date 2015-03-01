@@ -19,14 +19,13 @@ public class ResourceDrawer {
 		for(Tile t : model.universe.tiles){
 			double red=0, green=0, blue=0;
 			int spotCount=0;
-			for(UComp comp : t.comps)
-				if(comp instanceof ResourceSpot){
-					ResourceSpot spot = (ResourceSpot)comp;
-					spotCount++;
-					red += (255-spot.resource.color.getRed())*(1-spot.getRate())+spot.resource.color.getRed();
-					green += (255-spot.resource.color.getGreen())*(1-spot.getRate())+spot.resource.color.getGreen();
-					blue += (255-spot.resource.color.getBlue())*(1-spot.getRate())+spot.resource.color.getBlue();
-				}
+			for(ResourceSpot spot : t.getSpots()){
+				spotCount++;
+				Color spotColor = spot.getColor();
+				red += spotColor.getRed();
+				green += spotColor.getGreen();
+				blue += spotColor.getBlue();
+			}
 			if(spotCount != 0){
 				red /= spotCount;
 				green /= spotCount;

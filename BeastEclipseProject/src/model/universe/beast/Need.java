@@ -7,7 +7,7 @@ import model.universe.resource.Resource;
 
 public class Need {
 	
-	private static final double CAPACITY_MAX = 100;
+	private static final double CAPACITY_MAX = 300;
 	private static final double DEPLETION_MAX = 10;
 
 	public final Resource resource;
@@ -22,7 +22,7 @@ public class Need {
 			capacity = MyRandom.between(1, CAPACITY_MAX);
 			depletion = MyRandom.between(1, DEPLETION_MAX);
 		} else {
-			capacity = 100;
+			capacity = CAPACITY_MAX;
 			depletion = 1;
 		}
 			
@@ -64,9 +64,13 @@ public class Need {
 		return res;
 	}
 	
-	public void change(double capacity, double depletion){
-		this.capacity = capacity;
+	public void change(double depletion){
+		this.capacity = depletion*300;
 		level = capacity;
 		this.depletion = depletion;
+	}
+	
+	public double getActualNeed(){
+		return capacity-level;
 	}
 }

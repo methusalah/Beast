@@ -9,6 +9,7 @@ public abstract class UComp {
 	public Point2D coord;
 	public final Universe universe;
 	private boolean updated = true;
+	protected boolean destroyed = false;
 
 	public UComp(Universe universe, Point2D coord) {
 		this.universe = universe;
@@ -31,6 +32,7 @@ public abstract class UComp {
 	
 	protected void destroy() {
 		universe.unregister(this);
+		destroyed = true;
 	}
 	
 	public abstract Color getColor();

@@ -88,7 +88,8 @@ public class Loop implements KeyListener, MouseListener{
 						(closest == null || b.coord.getDistance(coordInModel) < closest.coord.getDistance(coordInModel)))
 					closest = b;
 		}
-		LogUtil.logger.info(""+closest.brain);
+		if(closest != null)
+			LogUtil.logger.info(""+closest.brain);
 	}
 
 	@Override

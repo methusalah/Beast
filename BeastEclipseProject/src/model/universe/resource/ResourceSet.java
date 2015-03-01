@@ -19,9 +19,9 @@ public class ResourceSet implements ResourceIDManager {
 		else {
 			resources.add(new Resource(this, this,
 					new Color(100, 250, 100),
-					500,
+					200,
 					1,
-					50,
+					100,
 					40,
 					true,
 					false));
@@ -41,14 +41,14 @@ public class ResourceSet implements ResourceIDManager {
 //					1,
 //					true,
 //					false));
-//			resources.add(new Resource(this, this,
-//					new Color(250, 150, 150),
-//					2000,
-//					2000,
-//					-100,
-//					50,
-//					false,
-//					true));
+			resources.add(new Resource(this, this,
+					new Color(250, 150, 150),
+					2000,
+					2000,
+					-20,
+					50,
+					false,
+					true));
 		}
 	}
 	

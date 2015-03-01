@@ -77,7 +77,7 @@ public class Resource {
 	}
 	public void unregisterSpot(){
 		spotCount--;
-		if(spotCount == 0)
+		if(spotCount == 0 && !spontaneousOnCorpse)
 			set.deleteResource(this);
 	}
 	

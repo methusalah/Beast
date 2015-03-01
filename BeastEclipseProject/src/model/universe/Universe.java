@@ -6,6 +6,7 @@ import geometry.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import tools.LogUtil;
 import math.MyRandom;
 import model.universe.beast.Beast;
 import model.universe.resource.Resource;
@@ -56,7 +57,7 @@ public class Universe {
 			c.update();
 		}
 		
-		int newBeastToCreate = 10;
+		int newBeastToCreate = 1;
 		if(beasts.size() < width*height*BEAST_RATE)
 			newBeastToCreate = (int)(width*height*BEAST_RATE)-beasts.size();
 		for(int i=0; i<newBeastToCreate; i++)
@@ -99,6 +100,18 @@ public class Universe {
     	Point2D p = new Point2D(t.x,  t.y).getAddition(x, y);
     	return getTile(getInBounds(p));
     }
+    public List<Tile> get9Neighbors(Point2D coord){
+    	return get9Neighbors(getTile(coord));
+    }
+
+    public List<Tile> get9Neighbors(Tile t){
+    	List<Tile> res = new ArrayList<>();
+    	for(int x=-1; x<2; x++)
+        	for(int y=-1; y<2; y++)
+        		res.add(getNeightborTile(t, x, y));
+    	return res;
+        		
+    }
 
 
     public ResourceSpot getResourceSpot(Resource resource, Point2D coord){
@@ -131,8 +144,12 @@ public class Universe {
 	}
 	
 	public void manageCorpse(Beast b){
-		for(Resource r : resourceSet.resources)
-			if(r.spontaneousOnCorpse)
-            	new ResourceSpot(this, b.coord, r);
+		if(b.biomasse > 100)
+			for(Resource r : resourceSet.resources)
+				if(r.spontaneousOnCorpse){
+	            	ResourceSpot corpse = new ResourceSpot(this, b.coord, r);
+	            	corpse.q = b.biomasse;
+//	            	LogUtil.logger.info(""+corpse.q);
+				}
 	}
 }

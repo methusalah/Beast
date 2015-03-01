@@ -7,9 +7,12 @@ import math.MyRandom;
 import model.universe.beast.Beast;
 import model.universe.beast.Need;
 import model.universe.beast.neuralnetwork.action.Actuator;
+import model.universe.beast.neuralnetwork.action.Attacker;
 import model.universe.beast.neuralnetwork.action.Harvester;
 import model.universe.beast.neuralnetwork.action.Mover;
 import model.universe.beast.neuralnetwork.action.Rotator;
+import model.universe.beast.neuralnetwork.perception.AttackSensor;
+import model.universe.beast.neuralnetwork.perception.BeastSensor;
 import model.universe.beast.neuralnetwork.perception.NeedSensor;
 import model.universe.beast.neuralnetwork.perception.ResourceSensor;
 import model.universe.beast.neuralnetwork.perception.Sensor;
@@ -24,7 +27,9 @@ public class BrainFactory {
 		brain = new Brain(beast);
 		addActuator(new Rotator(brain.serial++, brain));
 		addActuator(new Mover(brain.serial++, brain));
+		
 		addNeed(beast.need);
+		
 		classifyNeurons();
 		createRandomConnexions();
 	}
@@ -160,9 +165,11 @@ public class BrainFactory {
 	}
 	
 	public Sensor getRandomSensor(){
-		switch (MyRandom.between(0, 2)){
+		switch (MyRandom.between(0, 3)){
 		case 0: return new NeedSensor(brain.serial++, brain);
 		case 1: return new ResourceSensor(brain.serial++, brain, brain.beast.need.resource);
+		case 2: return new BeastSensor(brain.serial++, brain);
+		case 3: return new AttackSensor(brain.serial++, brain);
 		default : throw new RuntimeException();
 		}
 	}
@@ -171,6 +178,7 @@ public class BrainFactory {
 		case 0: return new Harvester(brain.serial++, brain, brain.beast.need.resource);
 		case 1: return new Mover(brain.serial++, brain);
 		case 2: return new Rotator(brain.serial++, brain);
+		case 3: return new Attacker(brain.serial++, brain);
 		default : throw new RuntimeException();
 		}
 	}

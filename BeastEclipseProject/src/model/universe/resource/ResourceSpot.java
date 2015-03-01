@@ -12,7 +12,7 @@ import model.universe.Universe;
 public class ResourceSpot extends UComp {
 
 	public final Resource resource;
-	double q;
+	public double q;
 	int delay = 0;
 	
 	public ResourceSpot(Universe universe, Point2D coord, Resource resource) {
@@ -67,8 +67,8 @@ public class ResourceSpot extends UComp {
 		return q/resource.qMax;
 	}
 	
-	public double harvest(double power){
-		double harvested = resource.qHarvest*power;
+	public double harvest(double power, double max){
+		double harvested = Math.min(max, resource.qHarvest*power);
 		q -= harvested;
 		if(q < 0){
 			harvested+=q;
@@ -82,7 +82,14 @@ public class ResourceSpot extends UComp {
 
 	@Override
 	public Color getColor() {
-		return resource.color;
+		int r = resource.color.getRed();
+		int g = resource.color.getGreen();
+		int b = resource.color.getBlue();
+		double rate = Math.min(1, getRate());
+		r = (int)((255-r)*(1-rate))+r;
+		g = (int)((255-g)*(1-rate))+g;
+		b = (int)((255-b)*(1-rate))+b;
+		return new Color(r, g, b);
 	}
 	
 	@Override

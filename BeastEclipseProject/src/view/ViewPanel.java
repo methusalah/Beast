@@ -53,7 +53,8 @@ public class ViewPanel extends JPanel {
 			g.drawString(turnPerSec+" turn/s. Turn "+model.universe.turn+" ResourceSetCount: "+model.universe.resourceSet.getCount(), 4,  getHeight()-300+12);
 			g.drawString("Max gen: "+beastDrawer.maxGen, 4,  getHeight()-300+24);
 			DecimalFormat df = new DecimalFormat("0");
-			g.drawString("Natural Beasts: "+beastDrawer.naturalBeatsCount+"("+df.format(100*beastDrawer.naturalBeatsCount/model.universe.beasts.size())+"%)", 4,  getHeight()-300+36);
+			if(!model.universe.beasts.isEmpty())
+				g.drawString("Natural Beasts: "+beastDrawer.naturalBeatsCount+"("+df.format(100*beastDrawer.naturalBeatsCount/model.universe.beasts.size())+"% : "+(model.universe.beasts.size()-beastDrawer.naturalBeatsCount)+")", 4,  getHeight()-300+36);
 		}
 		chrono = new StopWatch("View");
 		timer = System.currentTimeMillis();

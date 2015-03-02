@@ -35,7 +35,7 @@ public class ResourceSpot extends UComp {
 			if(resource.qGrowth <= 0)
 				destroy();
 			else{
-				delay = 100000;
+				delay = 1000;
 				return;
 			}
 		

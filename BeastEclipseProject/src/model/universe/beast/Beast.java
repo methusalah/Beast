@@ -89,8 +89,11 @@ public class Beast extends UComp {
 		trail = coord;
 		
 		brain.stimulate();
-		applyHarvestPower();
-		applyMovement();
+		
+		if(harvestPower>movePower)
+			applyHarvestPower();
+		else if(movePower>harvestPower)
+			applyMovement();
 
 		need.deplete();
 		if(need.getDepletionRate() <= 0 ||

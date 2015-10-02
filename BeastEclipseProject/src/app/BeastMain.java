@@ -13,13 +13,10 @@ import controller.Loop;
 public class BeastMain {
 	public static void main(String[] args) throws Exception {
 
-		
-		
-		
 		Logger.getLogger("").setLevel(Level.INFO);
 		LogUtil.init();
 		int seed = (int)(Math.random()*10000000);
-//		4701876
+
 		MyRandom.changeSeed(seed);
 		LogUtil.logger.info("Seed : "+seed);
 		
